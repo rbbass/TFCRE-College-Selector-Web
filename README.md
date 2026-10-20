@@ -14,7 +14,7 @@ This repository started as a copy of [TFCRE-College-Selector](https://github.com
 
 ## Department data
 
-The department data comes from `Input Files/Departments and Attributes.xlsx` (first sheet, columns A to O) and is built into the page; users cannot upload their own. The free-text notes in column P are not included.
+The department data comes from `Input Files/Departments and Attributes.xlsx` (first sheet, columns A to L) and is built into the page; users cannot upload their own. Columns M to O (NET and the two "Exp. per $1 Revenue" ratios) and the free-text notes in column P are left out, so they are not in the published page.
 
 To update the data, save the new spreadsheet over `Input Files/Departments and Attributes.xlsx`, put the plan CSVs to build in into `College Plans`, and run:
 
@@ -32,11 +32,7 @@ The spreadsheet layout the page expects:
 | B | Current college (optional). Detected when the header contains "college", "school" or "division", or when most values are text. |
 | Remaining columns | Numbers: faculty counts, student credit hours (SCH), headcounts, research and financial figures, and so on. `$`, `,` and `%` are handled; blanks count as missing. |
 
-Some calculated columns are added when matching headers are present:
-
-- **Total faculty**: headers containing "Faculty TT", "NTTF" and "Faculty PT".
-- **SCH per FT faculty**: a header containing "SCH", plus TT and NTTF faculty.
-- **Research exp. per TT faculty**: headers containing "Research Exp" and "Faculty TT".
+A **Total faculty** column is added when there are headers containing "Faculty TT", "NTTF" and "Faculty PT".
 
 Text in parentheses in a header is dropped from the display name.
 
@@ -45,7 +41,7 @@ Text in parentheses in a header is dropped from the display name.
 ### Design colleges tab
 - Drag departments from the unassigned pool into six colleges (or tap a department, then tap a college). Rename a college by editing its title.
 - Departments are color-coded by their current college.
-- A summary table shows the sum of every column for each new college, plus the affinity kept inside each college.
+- A summary table shows the sum of each column for each new college, plus the affinity kept inside each college.
 - **Suggest from affinity** groups the departments automatically to keep high-affinity departments together. Options: how even the college sizes must be, an optional financial balance (keep each college's total for a chosen column within a tolerance of the average), and whether to keep departments you have already placed. **Undo suggestion** restores the previous arrangement.
 - **Load a stored plan** opens a plan CSV as the working arrangement.
 - **Plans**: the plans in the `College Plans` folder (currently Cudd's Model and Model 4) are built in, marked "built-in", and cannot be deleted. Save the current arrangement, tick two or more plans to compare them on any column (balance table and side-by-side bars), and save each plan as its own CSV.

@@ -38,7 +38,8 @@ def put(page, name, end, body):
 
 ws = openpyxl.load_workbook(SRC, data_only=True).worksheets[0]
 rows = [[cell(c) for c in r]
-        for r in ws.iter_rows(values_only=True, max_col=15)  # column P holds free-text notes, not data
+        # Columns A-L only: M-O (NET and the two "Exp. per $1 Revenue" ratios) are not published, and P holds notes
+        for r in ws.iter_rows(values_only=True, max_col=12)
         if any(c is not None and str(c).strip() for c in r)]
 
 plans = sorted(PLANS.glob("*.csv"))

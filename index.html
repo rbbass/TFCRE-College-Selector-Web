@@ -108,7 +108,7 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
   <div id="bins"></div>
   <h2>College summary</h2>
   <div class="scroll"><table id="sum"></table></div>
-  <p class="sub" style="font-size:12px;margin:6px 0 0">Columns are summed. Exception: SCH per FT faculty is recalculated from each college's totals.</p>
+  <p class="sub" style="font-size:12px;margin:6px 0 0">Columns are summed.</p>
 </div>
 
 <div class="card" id="plans">
@@ -141,63 +141,63 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
 
 <script>
 const DATA=[
-["Unit", "College", "# Faculty TT (202504, IR0020)", "# Faculty NTTF (202504, IR0020)", "# Faculty PT (202504, IR0020)", "# GAs (paid lines) (202504, IR0020)", "Total SCH (202504, IR0020)", "number of UG Students major headcount", "number of Grad students headcount", "Research Expenditures FY26", "Proposal, Sum of % Credit, FY26", "Proposal, Prorated Total $ Requested, FY26", "NET (FY25 RCAT, $)", "Direct Exp. per $1 Revenue (FY25 RCAT)", "Total Exp. per $1 Revenue (FY25 RCAT)"],
-["Earth, Environment & Society", "CLAS-Natural Sciences", 29, 7, 12, 2, 8741, 405, 156, 3996941, 75.6, 13228599, -1132280, "", ""],
-["Biology", "CLAS-Natural Sciences", 13, 4, 1, 0, 5409, 589, 38, 2919621, 14.5, 7302139, -366664, 0.58, 1.04],
-["Chemistry", "CLAS-Natural Sciences", 9, 3, 1, 0, 5574, 204, 32, 1940275, 17.3, 20967285, -238958, 0.63, 1.04],
-["Physics", "CLAS-Natural Sciences", 6, 1, 1, 5, 2650, 56, 25, 231642, 2, 481405, -341986, 0.75, 1.11],
-["Mathematics and Statistics", "CLAS-Natural Sciences", 25, 8, 11, 18, 8740, 202, 103, 1353376, 13, 4167560, -996606, 0.74, 1.11],
-["Applied Linguistics", "CLAS - Social Sciences", 6, 0, 0, 0, 794, 79, 19, 0, 0, 0, -659660, 0.97, 1.46],
-["Psychology", "CLAS - Social Sciences", 12, 4, 16, 5, 8396, 952, 40, 1451891.26, 7, 1637089, 1586373, 0.41, 0.86],
-["Sociology", "CLAS - Social Sciences", 9, 1, 1, "", 2383, 127, 32, 0, 5.8, 2616267, 141834, 0.59, 0.96],
-["Speech & Hearing Sciences", "CLAS - Social Sciences", 6, 4, 6, "", 2254, 156, 79, 368288, 6, 2623671, 31422, 0.62, 0.99],
-["Black Studies", "CLAS - Humanities", 3, 1, 7, "", 2316, 6, 2, 20000, 2.3, 76248, 120657, 0.67, 0.93],
-["Chicanx/Latinx Studies", "CLAS - Humanities", 2, 0, 5, "", 1272, 5, "", 0, 0, 0, -98045, 0.85, 1.12],
-["Communication", "CLAS - Humanities", 3, 3, 2, "", 2312, 139, 15, 34846, 0, 0, 607178, 0.43, 0.8],
-["English", "CLAS - Humanities", 17, 7, 28, 4, 6487, 341, 88, 0, 0.2, 300000, -914165, 0.73, 1.11],
-["History", "CLAS - Humanities", 10, 1, 0, "", 2169, 137, 22, 0, 0.2, 300000, -934791, 0.92, 1.29],
-["Judaic Studies", "CLAS - Humanities", 3, 1, 0, "", 476, 4, "", 0, 0, 0, -553343, 4.97, 5.62],
-["Liberal Arts & Sci", "CLAS - Humanities", "", "", "", "", "", 872, 3, "", "", "", "", "", ""],
-["Indigenous Nations Studies", "CLAS - Humanities", 1, 3, 2, "", 810, 11, "", 134780, 1.9, 514780, -4863, 0.59, 1.01],
-["Philosophy", "CLAS - Humanities", 7, 1, 1, "", 1830, 58, "", 0, 1, 72559, -304803, 0.83, 1.12],
-["Women, Gender & Sexuality Studies", "CLAS - Humanities", 3, 1, 7, "", 1491, 19, "", 0, 0.7, 313750, 305417, 0.6, 0.85],
-["World Languages & Literatures", "CLAS - Humanities", 16, 10, 21, 4, 7381, 94, 9, 449000, 0, 0, -663678, 0.79, 1.09],
-["CLAS Humanities - Other", "CLAS - Humanities", "", "", "", "", "", "", "", 644490, 79.6, 14742582, "", "", ""],
-["Criminology and Criminal Justice", "CUPA", 8, 1, 9, "", 4692, 410, 28, 249210, 2, 57457, 639842, 0.5, 0.89],
-["Economics", "CUPA", 10, 1, 2, "", 3001, 90, 14, 76726, 2.3, 1207648, -788692, 0.93, 1.26],
-["Politics and Global Affairs", "CUPA", 11, 3, 2, "", 3238, 272, 14, 0, 0, 0, 124381, 0.61, 0.97],
-["Public Administration", "CUPA", 7, 2, 4, "", 850, "", 144, 0, 0, 0, -833128, 1.02, 1.39],
-["Urban Studies and Planning", "CUPA", 10, 4, 8, "", 3135, 87, 113, 154883, 0, 0, 383402, 0.55, 0.9],
-["Other CUPA Centers & Institutes", "CUPA", "", "", "", "", "", "", "", 8848927.25, 26.35, 8819905, "", "", ""],
-["Child, Family, Youth", "School of Social Work", 3, 2, 18, 0, 3900, 171, "", 2298145, 2, 4077790, "", "", ""],
-["SSW RRI Regional Research Institutes", "School of Social Work", "", 1, "", "", 19, "", "", 13602583, 30.3, 11821097, "", "", ""],
-["Social Work", "School of Social Work", 13, 13, 68, 1, 10186, 437, 764, 7488, 1.1, 44691, "", "", ""],
-["Human Services", "School of Social Work", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-["Civil & Environmental Engineering", "Engineering and Computer Science", 12, 4, 2, 1, 2377, 261, 49, 2014498.83, 42.8, 10539235, -741730, 0.75, 1.15],
-["Computer Science", "Engineering and Computer Science", 20, 9, 5, 1, 6109, 740, 184, -42520.56, 26.26, 9363742, 415532, 0.57, 0.97],
-["Electrical & Computer Engineering", "Engineering and Computer Science", 12, 8, 5, 1, 4041, 372, 325, 1285583, 19.65, 10434767, 2618578, 0.45, 0.79],
-["Engineering & Technology Management", "Engineering and Computer Science", 4, 0, 3, 0, 558, 0, "", 0, 0.5, 2499286, 168903, 0.61, 0.9],
-["Mechanical & Materials Engineering", "Engineering and Computer Science", 10, 2, 6, 0, 2284, 318, 85, 2745002, 13, 4637730, 1191279, 0.45, 0.83],
-["Other MCECS", "Engineering and Computer Science", "", "", "", "", "", "", "", 346043.86, 8.51, 4006224, "", "", ""],
-["Educator Licensure", "College of Education", 9, 3, 3, "", 1206, 176, 216, 0, 0, 0, "", "", ""],
-["Field Placement & Partnerships", "College of Education", 0, 0, 1, "", 12, "", "", "", "", "", "", "", ""],
-["Leadership, Learning & Counseling", "College of Education", 22, 9, 22, "", 6197, 6, 557, "", "", "", "", "", ""],
-["Other Funded COE Units", "College of Education", "", "", "", "", "", "", "", 10674954, 21.1, 25120446, "", "", ""],
-["School of Art + Design (and Art History)", "College of the Arts", 18, 1, 32, 4, 7478, 741, 13, 106381, 3.34, 445740, -684964, 0.68, 1.18],
-["School of Architecture", "College of the Arts", 7, 2, 8, 1, 2392, 254, 50, 0, 0, 0, -360660, 0.53, 1.04],
-["School of Film", "College of the Arts", 7, 2, 4, "", 1677, 210, 0, 0, 1, 106654, -369902, 0.66, 1.15],
-["School of Music + Theater", "College of the Arts", 22, 6, 53, 4, 5381, 385, 21, 0, 0, 0, -1894614, "", ""],
-["Accounting", "School of Business", 4, 3, 10, "", 3883, 706, 0, "", "", "", "", "", ""],
-["Business Admin", "School of Business", 9, 10, 40, "", 13785, 426, 291, "", "", "", "", "", ""],
-["Business Tech & Analytics", "School of Business", 2, 1, 2, "", 793, "", "", "", "", "", "", "", ""],
-["Finance", "School of Business", 4, 1, 4, "", 1302, 357, 29, "", "", "", "", "", ""],
-["Supply & Logistics", "School of Business", 0, 3, 8, "", 1097, "", 44, "", "", "", "", "", ""],
-["Management", "School of Business", 1, 3, 13, "", 2391, 562, 4, "", "", "", "", "", ""],
-["Marketing", "School of Business", 3, 3, 6, "", 2176, 452, 0, "", "", "", "", "", ""],
-["SB & SB Office of the Dean", "School of Business", "", "", "", "", "", "", "", 1029000, 4, 1249804, "", "", ""],
-["Pub Health Ed", "School of Public Health", 14, 4, 25, "", 6469, 834, 3, 26467, 0, 0, "", "", ""],
-["Health Management & Policy", "School of Public Health", "", "", "", "", "", 0, 1, "", "", "", "", "", ""],
-["Other SOPH Funding", "School of Public Health", "", "", "", "", "", "", "", 207311, 7.7, 3405976, "", "", ""]];
+["Unit", "College", "# Faculty TT (202504, IR0020)", "# Faculty NTTF (202504, IR0020)", "# Faculty PT (202504, IR0020)", "# GAs (paid lines) (202504, IR0020)", "Total SCH (202504, IR0020)", "number of UG Students major headcount", "number of Grad students headcount", "Research Expenditures FY26", "Proposal, Sum of % Credit, FY26", "Proposal, Prorated Total $ Requested, FY26"],
+["Earth, Environment & Society", "CLAS-Natural Sciences", 29, 7, 12, 2, 8741, 405, 156, 3996941, 75.6, 13228599],
+["Biology", "CLAS-Natural Sciences", 13, 4, 1, 0, 5409, 589, 38, 2919621, 14.5, 7302139],
+["Chemistry", "CLAS-Natural Sciences", 9, 3, 1, 0, 5574, 204, 32, 1940275, 17.3, 20967285],
+["Physics", "CLAS-Natural Sciences", 6, 1, 1, 5, 2650, 56, 25, 231642, 2, 481405],
+["Mathematics and Statistics", "CLAS-Natural Sciences", 25, 8, 11, 18, 8740, 202, 103, 1353376, 13, 4167560],
+["Applied Linguistics", "CLAS - Social Sciences", 6, 0, 0, 0, 794, 79, 19, 0, 0, 0],
+["Psychology", "CLAS - Social Sciences", 12, 4, 16, 5, 8396, 952, 40, 1451891.26, 7, 1637089],
+["Sociology", "CLAS - Social Sciences", 9, 1, 1, "", 2383, 127, 32, 0, 5.8, 2616267],
+["Speech & Hearing Sciences", "CLAS - Social Sciences", 6, 4, 6, "", 2254, 156, 79, 368288, 6, 2623671],
+["Black Studies", "CLAS - Humanities", 3, 1, 7, "", 2316, 6, 2, 20000, 2.3, 76248],
+["Chicanx/Latinx Studies", "CLAS - Humanities", 2, 0, 5, "", 1272, 5, "", 0, 0, 0],
+["Communication", "CLAS - Humanities", 3, 3, 2, "", 2312, 139, 15, 34846, 0, 0],
+["English", "CLAS - Humanities", 17, 7, 28, 4, 6487, 341, 88, 0, 0.2, 300000],
+["History", "CLAS - Humanities", 10, 1, 0, "", 2169, 137, 22, 0, 0.2, 300000],
+["Judaic Studies", "CLAS - Humanities", 3, 1, 0, "", 476, 4, "", 0, 0, 0],
+["Liberal Arts & Sci", "CLAS - Humanities", "", "", "", "", "", 872, 3, "", "", ""],
+["Indigenous Nations Studies", "CLAS - Humanities", 1, 3, 2, "", 810, 11, "", 134780, 1.9, 514780],
+["Philosophy", "CLAS - Humanities", 7, 1, 1, "", 1830, 58, "", 0, 1, 72559],
+["Women, Gender & Sexuality Studies", "CLAS - Humanities", 3, 1, 7, "", 1491, 19, "", 0, 0.7, 313750],
+["World Languages & Literatures", "CLAS - Humanities", 16, 10, 21, 4, 7381, 94, 9, 449000, 0, 0],
+["CLAS Humanities - Other", "CLAS - Humanities", "", "", "", "", "", "", "", 644490, 79.6, 14742582],
+["Criminology and Criminal Justice", "CUPA", 8, 1, 9, "", 4692, 410, 28, 249210, 2, 57457],
+["Economics", "CUPA", 10, 1, 2, "", 3001, 90, 14, 76726, 2.3, 1207648],
+["Politics and Global Affairs", "CUPA", 11, 3, 2, "", 3238, 272, 14, 0, 0, 0],
+["Public Administration", "CUPA", 7, 2, 4, "", 850, "", 144, 0, 0, 0],
+["Urban Studies and Planning", "CUPA", 10, 4, 8, "", 3135, 87, 113, 154883, 0, 0],
+["Other CUPA Centers & Institutes", "CUPA", "", "", "", "", "", "", "", 8848927.25, 26.35, 8819905],
+["Child, Family, Youth", "School of Social Work", 3, 2, 18, 0, 3900, 171, "", 2298145, 2, 4077790],
+["SSW RRI Regional Research Institutes", "School of Social Work", "", 1, "", "", 19, "", "", 13602583, 30.3, 11821097],
+["Social Work", "School of Social Work", 13, 13, 68, 1, 10186, 437, 764, 7488, 1.1, 44691],
+["Human Services", "School of Social Work", "", "", "", "", "", "", "", "", "", ""],
+["Civil & Environmental Engineering", "Engineering and Computer Science", 12, 4, 2, 1, 2377, 261, 49, 2014498.83, 42.8, 10539235],
+["Computer Science", "Engineering and Computer Science", 20, 9, 5, 1, 6109, 740, 184, -42520.56, 26.26, 9363742],
+["Electrical & Computer Engineering", "Engineering and Computer Science", 12, 8, 5, 1, 4041, 372, 325, 1285583, 19.65, 10434767],
+["Engineering & Technology Management", "Engineering and Computer Science", 4, 0, 3, 0, 558, 0, "", 0, 0.5, 2499286],
+["Mechanical & Materials Engineering", "Engineering and Computer Science", 10, 2, 6, 0, 2284, 318, 85, 2745002, 13, 4637730],
+["Other MCECS", "Engineering and Computer Science", "", "", "", "", "", "", "", 346043.86, 8.51, 4006224],
+["Educator Licensure", "College of Education", 9, 3, 3, "", 1206, 176, 216, 0, 0, 0],
+["Field Placement & Partnerships", "College of Education", 0, 0, 1, "", 12, "", "", "", "", ""],
+["Leadership, Learning & Counseling", "College of Education", 22, 9, 22, "", 6197, 6, 557, "", "", ""],
+["Other Funded COE Units", "College of Education", "", "", "", "", "", "", "", 10674954, 21.1, 25120446],
+["School of Art + Design (and Art History)", "College of the Arts", 18, 1, 32, 4, 7478, 741, 13, 106381, 3.34, 445740],
+["School of Architecture", "College of the Arts", 7, 2, 8, 1, 2392, 254, 50, 0, 0, 0],
+["School of Film", "College of the Arts", 7, 2, 4, "", 1677, 210, 0, 0, 1, 106654],
+["School of Music + Theater", "College of the Arts", 22, 6, 53, 4, 5381, 385, 21, 0, 0, 0],
+["Accounting", "School of Business", 4, 3, 10, "", 3883, 706, 0, "", "", ""],
+["Business Admin", "School of Business", 9, 10, 40, "", 13785, 426, 291, "", "", ""],
+["Business Tech & Analytics", "School of Business", 2, 1, 2, "", 793, "", "", "", "", ""],
+["Finance", "School of Business", 4, 1, 4, "", 1302, 357, 29, "", "", ""],
+["Supply & Logistics", "School of Business", 0, 3, 8, "", 1097, "", 44, "", "", ""],
+["Management", "School of Business", 1, 3, 13, "", 2391, 562, 4, "", "", ""],
+["Marketing", "School of Business", 3, 3, 6, "", 2176, 452, 0, "", "", ""],
+["SB & SB Office of the Dean", "School of Business", "", "", "", "", "", "", "", 1029000, 4, 1249804],
+["Pub Health Ed", "School of Public Health", 14, 4, 25, "", 6469, 834, 3, 26467, 0, 0],
+["Health Management & Policy", "School of Public Health", "", "", "", "", "", 0, 1, "", "", ""],
+["Other SOPH Funding", "School of Public Health", "", "", "", "", "", "", "", 207311, 7.7, 3405976]];
 const PLANS=[
 "Plan,Department,College number,College name\nCudd's Model,Pub Health Ed,6,OHSU\nCudd's Model,Health Management & Policy,6,OHSU\nCudd's Model,Other SOPH Funding,6,OHSU\nCudd's Model,\"Child, Family, Youth\",4,COE/SSW\nCudd's Model,SSW RRI Regional Research Institutes,4,COE/SSW\nCudd's Model,Social Work,4,COE/SSW\nCudd's Model,Human Services,4,COE/SSW\nCudd's Model,School of Art + Design (and Art History),5,The Arts\nCudd's Model,School of Film,5,The Arts\nCudd's Model,School of Music + Theater,5,The Arts\nCudd's Model,School of Architecture,5,The Arts\nCudd's Model,Educator Licensure,4,COE/SSW\nCudd's Model,Field Placement & Partnerships,4,COE/SSW\nCudd's Model,\"Leadership, Learning & Counseling\",4,COE/SSW\nCudd's Model,Other Funded COE Units,4,COE/SSW\nCudd's Model,Speech & Hearing Sciences,4,COE/SSW\nCudd's Model,Accounting,3,School of Business\nCudd's Model,Business Admin,3,School of Business\nCudd's Model,Business Tech & Analytics,3,School of Business\nCudd's Model,Management,3,School of Business\nCudd's Model,SB & SB Office of the Dean,3,School of Business\nCudd's Model,Marketing,3,School of Business\nCudd's Model,Supply & Logistics,3,School of Business\nCudd's Model,Finance,3,School of Business\nCudd's Model,Civil & Environmental Engineering,2,Maseeh/CLAS-PS\nCudd's Model,Electrical & Computer Engineering,2,Maseeh/CLAS-PS\nCudd's Model,Engineering & Technology Management,2,Maseeh/CLAS-PS\nCudd's Model,Mechanical & Materials Engineering,2,Maseeh/CLAS-PS\nCudd's Model,Other MCECS,2,Maseeh/CLAS-PS\nCudd's Model,Computer Science,2,Maseeh/CLAS-PS\nCudd's Model,Chemistry,2,Maseeh/CLAS-PS\nCudd's Model,Physics,2,Maseeh/CLAS-PS\nCudd's Model,Mathematics and Statistics,2,Maseeh/CLAS-PS\nCudd's Model,\"Earth, Environment & Society\",2,Maseeh/CLAS-PS\nCudd's Model,Biology,1,CUPA/CLAS-H-SS\nCudd's Model,Criminology and Criminal Justice,1,CUPA/CLAS-H-SS\nCudd's Model,Other CUPA Centers & Institutes,1,CUPA/CLAS-H-SS\nCudd's Model,Economics,1,CUPA/CLAS-H-SS\nCudd's Model,Politics and Global Affairs,1,CUPA/CLAS-H-SS\nCudd's Model,Urban Studies and Planning,1,CUPA/CLAS-H-SS\nCudd's Model,Public Administration,1,CUPA/CLAS-H-SS\nCudd's Model,Applied Linguistics,1,CUPA/CLAS-H-SS\nCudd's Model,Psychology,1,CUPA/CLAS-H-SS\nCudd's Model,Sociology,1,CUPA/CLAS-H-SS\nCudd's Model,World Languages & Literatures,1,CUPA/CLAS-H-SS\nCudd's Model,CLAS Humanities - Other,1,CUPA/CLAS-H-SS\nCudd's Model,Liberal Arts & Sci,1,CUPA/CLAS-H-SS\nCudd's Model,Indigenous Nations Studies,1,CUPA/CLAS-H-SS\nCudd's Model,Philosophy,1,CUPA/CLAS-H-SS\nCudd's Model,Black Studies,1,CUPA/CLAS-H-SS\nCudd's Model,\"Women, Gender & Sexuality Studies\",1,CUPA/CLAS-H-SS\nCudd's Model,Chicanx/Latinx Studies,1,CUPA/CLAS-H-SS\nCudd's Model,Communication,1,CUPA/CLAS-H-SS\nCudd's Model,Conflict Resolution,1,CUPA/CLAS-H-SS\nCudd's Model,English,1,CUPA/CLAS-H-SS\nCudd's Model,History,1,CUPA/CLAS-H-SS\nCudd's Model,Judaic Studies,1,CUPA/CLAS-H-SS\n",
 "Plan,Department,College number,College name\nModel 4,Civil & Environmental Engineering,2,\"Engineering, Maths, & Physics Pathway\"\nModel 4,Mechanical & Materials Engineering,2,\"Engineering, Maths, & Physics Pathway\"\nModel 4,Electrical & Computer Engineering,2,\"Engineering, Maths, & Physics Pathway\"\nModel 4,Engineering & Technology Management,2,\"Engineering, Maths, & Physics Pathway\"\nModel 4,Other MCECS,2,\"Engineering, Maths, & Physics Pathway\"\nModel 4,Computer Science,2,\"Engineering, Maths, & Physics Pathway\"\nModel 4,Physics,2,\"Engineering, Maths, & Physics Pathway\"\nModel 4,Mathematics and Statistics,2,\"Engineering, Maths, & Physics Pathway\"\nModel 4,Accounting,3,Business & Economics Pathway\nModel 4,Business Admin,3,Business & Economics Pathway\nModel 4,Business Tech & Analytics,3,Business & Economics Pathway\nModel 4,Economics,3,Business & Economics Pathway\nModel 4,Finance,3,Business & Economics Pathway\nModel 4,Supply & Logistics,3,Business & Economics Pathway\nModel 4,Management,3,Business & Economics Pathway\nModel 4,Marketing,3,Business & Economics Pathway\nModel 4,SB & SB Office of the Dean,3,Business & Economics Pathway\nModel 4,Pub Health Ed,6,\"Health, Science & the Earth Pathway\"\nModel 4,Health Management & Policy,6,\"Health, Science & the Earth Pathway\"\nModel 4,Other SOPH Funding,6,\"Health, Science & the Earth Pathway\"\nModel 4,\"Earth, Environment & Society\",6,\"Health, Science & the Earth Pathway\"\nModel 4,Chemistry,6,\"Health, Science & the Earth Pathway\"\nModel 4,Biology,6,\"Health, Science & the Earth Pathway\"\nModel 4,Speech & Hearing Sciences,6,\"Health, Science & the Earth Pathway\"\nModel 4,Psychology,6,\"Health, Science & the Earth Pathway\"\nModel 4,Criminology and Criminal Justice,4,Society & Identity Pathway\nModel 4,Politics and Global Affairs,4,Society & Identity Pathway\nModel 4,Public Administration,4,Society & Identity Pathway\nModel 4,Urban Studies and Planning,4,Society & Identity Pathway\nModel 4,Other CUPA Centers & Institutes,4,Society & Identity Pathway\nModel 4,Educator Licensure,4,Society & Identity Pathway\nModel 4,Field Placement & Partnerships,4,Society & Identity Pathway\nModel 4,\"Leadership, Learning & Counseling\",4,Society & Identity Pathway\nModel 4,Other Funded COE Units,4,Society & Identity Pathway\nModel 4,\"Child, Family, Youth\",4,Society & Identity Pathway\nModel 4,SSW RRI Regional Research Institutes,4,Society & Identity Pathway\nModel 4,Social Work,4,Society & Identity Pathway\nModel 4,Human Services,4,Society & Identity Pathway\nModel 4,Black Studies,4,Society & Identity Pathway\nModel 4,\"Women, Gender & Sexuality Studies\",4,Society & Identity Pathway\nModel 4,Indigenous Nations Studies,4,Society & Identity Pathway\nModel 4,School of Art + Design (and Art History),1,\"Design, Creativity & Performance Pathway\"\nModel 4,School of Architecture,1,\"Design, Creativity & Performance Pathway\"\nModel 4,School of Film,1,\"Design, Creativity & Performance Pathway\"\nModel 4,School of Music + Theater,1,\"Design, Creativity & Performance Pathway\"\nModel 4,Chicanx/Latinx Studies,1,\"Design, Creativity & Performance Pathway\"\nModel 4,Sociology,5,\"Language, Culture & Meaning Pathway\"\nModel 4,Applied Linguistics,5,\"Language, Culture & Meaning Pathway\"\nModel 4,Communication,5,\"Language, Culture & Meaning Pathway\"\nModel 4,World Languages & Literatures,5,\"Language, Culture & Meaning Pathway\"\nModel 4,English,5,\"Language, Culture & Meaning Pathway\"\nModel 4,History,5,\"Language, Culture & Meaning Pathway\"\nModel 4,Judaic Studies,5,\"Language, Culture & Meaning Pathway\"\nModel 4,Liberal Arts & Sci,5,\"Language, Culture & Meaning Pathway\"\nModel 4,Philosophy,5,\"Language, Culture & Meaning Pathway\"\nModel 4,CLAS Humanities - Other,5,\"Language, Culture & Meaning Pathway\"\n"];
@@ -208,7 +208,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const clean=h=>String(h||'').replace(/\s*\(.*?\)\s*/g,' ').replace(/\s+/g,' ').trim();
 const num=v=>{if(v===null||v===undefined)return null;if(typeof v==='number')return v;const s=String(v).trim();if(!s)return null;const n=parseFloat(s.replace(/[$,%\s]/g,''));return isNaN(n)?null:n};
-const cur=n=>/expend|requested|^net|exp\. per tt/i.test(n);
+const cur=n=>/expend|requested/i.test(n);
 const fmt=(n,v)=>{if(v==null)return '–';if(cur(n))return (v<0?'-':'')+'$'+Math.abs(Math.round(v)).toLocaleString();return Number.isInteger(v)?v.toLocaleString():v.toLocaleString(undefined,{maximumFractionDigits:2})};
 const short=v=>{const a=Math.abs(v),s=v<0?'-':'';return a>=1e6?s+'$'+(a/1e6).toFixed(1)+'M':a>=1e3?s+'$'+Math.round(a/1e3)+'K':s+'$'+Math.round(a)};
 const sum=(r,names)=>{let t=null;names.forEach(n=>{if(n&&r.v[n]!=null)t=(t||0)+r.v[n]});return t};
@@ -222,10 +222,8 @@ function load(aoa){
   const o=hasCol?2:1;
   cols=hdr.slice(o);
   rows=body.map(r=>{const v={};cols.forEach((n,i)=>v[n]=num(r[i+o]));return{unit:String(r[0]).trim(),coll:hasCol?(String(r[1]??'').trim()||'(No college listed)'):'',v}});
-  const tt=find(/faculty tt/i),nt=find(/nttf/i),pt=find(/faculty pt/i),sch=find(/sch/i),res=find(/research exp/i);
+  const tt=find(/faculty tt/i),nt=find(/nttf/i),pt=find(/faculty pt/i);
   if(tt&&nt&&pt){cols.push('Total faculty');rows.forEach(r=>r.v['Total faculty']=sum(r,[tt,nt,pt]))}
-  if(sch&&tt&&nt){cols.push('SCH per FT faculty');rows.forEach(r=>{const f=sum(r,[tt,nt]);r.v['SCH per FT faculty']=(f&&r.v[sch]!=null)?Math.round(r.v[sch]/f):null})}
-  if(res&&tt){cols.push('Research exp. per TT faculty');rows.forEach(r=>{r.v['Research exp. per TT faculty']=(r.v[tt]&&r.v[res]!=null)?Math.round(r.v[res]/r.v[tt]):null})}
   rowBy=new Map(rows.map(r=>[r.unit,r]));cOrder=[...new Set(rows.map(r=>r.coll))].sort();restore();sortC=null;render();
 }
 
@@ -256,19 +254,12 @@ function colleges(){
  $('pool').innerHTML=(()=>{const u=g(-1);if(!u.length)return '<span class="sub">All units assigned</span>';if(!hasCol)return u.map(chip).join('');const m={};u.forEach(r=>(m[r.coll]=m[r.coll]||[]).push(r));return Object.keys(m).sort().map(k=>`<div class="cg"><div class="bc"><span class="sw" style="--h:${hue(k)}"></span><b>${esc(k)}</b> (${m[k].length})</div>${m[k].map(chip).join('')}</div>`).join('')})();
  $('legend').innerHTML=hasCol?'Current college: '+cOrder.map(k=>`<span style="white-space:nowrap;margin-right:10px"><span class="sw" style="--h:${hue(k)}"></span>${esc(k)}</span>`).join(''):'';
  $('bins').innerHTML=names.map((n,b)=>`<div class="bin" data-b="${b}"><input class="bn" data-b="${b}" value="${esc(n)}"><div class="bc">${g(b).length} units</div>${g(b).map(chip).join('')}</div>`).join('');
- const tt=find(/faculty tt/i),nt=find(/nttf/i),sch=find(/sch/i),res=find(/research exp/i);
- const so=(c,l)=>l.reduce((a,r)=>a+(r.v[c]||0),0);
  const val=VAL=(c,l)=>{
-  if(!l.length)return null;
-  if(c==='SCH per FT faculty'){const f=so(tt,l)+so(nt,l);return f?Math.round(so(sch,l)/f):null}
-  if(c==='Research exp. per TT faculty'){const f=so(tt,l);return f?Math.round(so(res,l)/f):null}
   const vs=l.map(r=>r.v[c]).filter(v=>v!=null);
-  if(!vs.length)return null;
-  const s=vs.reduce((a,b)=>a+b,0);
-  return /per \$1/i.test(c)?s/vs.length:s;
+  return vs.length?vs.reduce((a,b)=>a+b,0):null;
  };
  const groups=[...names.map((n,b)=>[n,g(b)]),['Unassigned',g(-1)],['All units',rows]];
- $('sum').innerHTML='<thead><tr><th>Metric</th>'+groups.map(x=>`<th>${esc(x[0])}</th>`).join('')+'</tr></thead><tbody><tr><td>Units</td>'+groups.map(x=>`<td>${x[1].length}</td>`).join('')+'</tr>'+(pairSum(rows)>0?'<tr><td>Within-college affinity</td>'+groups.map((x,i)=>`<td>${i===NB?'–':pairSum(x[1])}</td>`).join('')+'</tr>':'')+cols.filter(c=>!/per \$1/i.test(c)&&c!=='Research exp. per TT faculty').map(c=>`<tr><td>${esc(c)}</td>`+groups.map(x=>{const v=val(c,x[1]);return `<td class="${v<0?'neg':''}">${fmt(c,v)}</td>`}).join('')+'</tr>').join('')+'</tbody>';
+ $('sum').innerHTML='<thead><tr><th>Metric</th>'+groups.map(x=>`<th>${esc(x[0])}</th>`).join('')+'</tr></thead><tbody><tr><td>Units</td>'+groups.map(x=>`<td>${x[1].length}</td>`).join('')+'</tr>'+(pairSum(rows)>0?'<tr><td>Within-college affinity</td>'+groups.map((x,i)=>`<td>${i===NB?'–':pairSum(x[1])}</td>`).join('')+'</tr>':'')+cols.map(c=>`<tr><td>${esc(c)}</td>`+groups.map(x=>{const v=val(c,x[1]);return `<td class="${v<0?'neg':''}">${fmt(c,v)}</td>`}).join('')+'</tr>').join('')+'</tbody>';
  renderPlans();
 }
 const cc=$('colleges');
@@ -293,7 +284,7 @@ function allPlans(){const b=builtIn();return Object.keys(b).map(n=>({k:'__b:'+n,
 const lab=x=>x.label;
 function renderPlans(){
  const pm=$('pm');
- if(pm.dataset.k!==cols.join('|')){pm.innerHTML=cols.filter(c=>!/per \$1/i.test(c)).map(c=>`<option>${esc(c)}</option>`).join('');pm.value=find(/sch/i)||cols[0];pm.dataset.k=cols.join('|')}
+ if(pm.dataset.k!==cols.join('|')){pm.innerHTML=cols.map(c=>`<option>${esc(c)}</option>`).join('');pm.value=find(/sch/i)||cols[0];pm.dataset.k=cols.join('|')}
  $('pstat').textContent='Built-in plans are always available. Plans you save are kept in this browser only; use "Save CSV" to share one with a colleague.';
  const list=allPlans(),byK={};list.forEach(x=>byK[x.k]=x);
  [...cmpSel].forEach(k=>{if(k!=='__cur'&&!byK[k])cmpSel.delete(k)});
@@ -301,7 +292,7 @@ function renderPlans(){
  $('plist').innerHTML=keys.map(k=>{const x=byK[k];return `<div class="prow"><label><input type="checkbox" data-p="${esc(k)}" ${cmpSel.has(k)?'checked':''}> ${k==='__cur'?'<b>Current working plan</b>':esc(lab(x))+(x.b?' <span class="bc" style="margin:0">built-in</span>':'')}</label>${k==='__cur'?` <button class="ghost" data-save="__cur">Save CSV</button>`:` <button class="ghost" data-load="${esc(k)}">Load</button> <button class="ghost" data-save="${esc(k)}">Save CSV</button>`+(x.b?'':` <button class="ghost" data-del="${esc(k)}">Delete</button>`)}</div>`}).join('');
  const sl=keys.filter(k=>cmpSel.has(k));
  if(sl.length<2){$('pcmp').innerHTML='<p class="sub">Tick two or more plans above to compare them. Save the current arrangement first so you can keep changing it.</p>';return}
- const m=pm.value,net=find(/^net/i),TOTAFF=pairSum(rows);
+ const m=pm.value,TOTAFF=pairSum(rows);
  const get=k=>k==='__cur'?{assign,names}:byK[k].p;
  const lbl=k=>k==='__cur'?'Current working plan':lab(byK[k]);
  const info=sl.map(k=>{
@@ -311,10 +302,10 @@ function renderPlans(){
   const vs=gs.map(x=>x.v).filter(v=>v!=null);
   const mean=vs.length?vs.reduce((a,b)=>a+b,0)/vs.length:0;
   const sd=Math.sqrt(vs.reduce((a,b)=>a+(b-mean)**2,0)/(vs.length||1));
-  return{k,p,gs,mn:vs.length?Math.min(...vs):null,mx:vs.length?Math.max(...vs):null,cv:mean?sd/Math.abs(mean)*100:null,neg:net?gs.filter(x=>VAL(net,x.l)<0).length:null,un:rows.filter(r=>!(p.assign[r.unit]>=0)).length,ak:gs.reduce((a,x)=>a+pairSum(x.l),0)};
+  return{k,p,gs,mn:vs.length?Math.min(...vs):null,mx:vs.length?Math.max(...vs):null,cv:mean?sd/Math.abs(mean)*100:null,un:rows.filter(r=>!(p.assign[r.unit]>=0)).length,ak:gs.reduce((a,x)=>a+pairSum(x.l),0)};
  });
- const th=['Plan','Colleges','Unassigned units','Smallest','Largest','Max \u00f7 min','Spread (CV)'].concat(net?['Colleges with negative NET']:[]).concat(TOTAFF>0?['Affinity kept']:[]);
- const st=`<div class="scroll"><table id="pst"><thead><tr>${th.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`+info.map(i=>`<tr><td>${esc(lbl(i.k))}</td><td>${i.gs.length}</td><td>${i.un}</td><td>${fmt(m,i.mn)}</td><td>${fmt(m,i.mx)}</td><td>${i.mn>0?(i.mx/i.mn).toFixed(1)+'\u00d7':'\u2013'}</td><td>${i.cv==null?'\u2013':i.cv.toFixed(0)+'%'}</td>${net?`<td>${i.neg}</td>`:''}${TOTAFF>0?`<td>${Math.round(i.ak/TOTAFF*100)}%</td>`:''}</tr>`).join('')+'</tbody></table></div><p class="sub" style="font-size:12px;margin:6px 0 0">Smallest/largest/spread describe the chosen metric across each plan\'s colleges. Lower max \u00f7 min and spread mean more evenly balanced colleges.</p>';
+ const th=['Plan','Colleges','Unassigned units','Smallest','Largest','Max \u00f7 min','Spread (CV)'].concat(TOTAFF>0?['Affinity kept']:[]);
+ const st=`<div class="scroll"><table id="pst"><thead><tr>${th.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`+info.map(i=>`<tr><td>${esc(lbl(i.k))}</td><td>${i.gs.length}</td><td>${i.un}</td><td>${fmt(m,i.mn)}</td><td>${fmt(m,i.mx)}</td><td>${i.mn>0?(i.mx/i.mn).toFixed(1)+'\u00d7':'\u2013'}</td><td>${i.cv==null?'\u2013':i.cv.toFixed(0)+'%'}</td>${TOTAFF>0?`<td>${Math.round(i.ak/TOTAFF*100)}%</td>`:''}</tr>`).join('')+'</tbody></table></div><p class="sub" style="font-size:12px;margin:6px 0 0">Smallest/largest/spread describe the chosen metric across each plan\'s colleges. Lower max \u00f7 min and spread mean more evenly balanced colleges.</p>';
  const all=info.flatMap(i=>i.gs.map(x=>x.v)).filter(v=>v!=null);
  const lo=Math.min(0,...all),hi=Math.max(0,...all),rg=(hi-lo)||1;
  const blocks=info.map(i=>`<div><h2>${esc(lbl(i.k))}</h2>`+[...i.gs].sort((a,b)=>(b.v??-1e18)-(a.v??-1e18)).map(x=>{const v=x.v;if(v==null)return `<div class="row"><div class="lab">${esc(x.n)} (${x.l.length})</div><div class="track"></div><div class="val">\u2013</div></div>`;const l=(Math.min(0,v)-lo)/rg*100,w=Math.abs(v)/rg*100;return `<div class="row"><div class="lab" title="${esc(x.n)}">${esc(x.n)} (${x.l.length})</div><div class="track"><div class="fill ${v<0?'n':''}" style="left:${l}%;width:${Math.max(w,.4)}%"></div></div><div class="val ${v<0?'neg':''}">${fmt(m,v)}</div></div>`}).join('')+'</div>');
@@ -382,7 +373,7 @@ ab.addEventListener('change',e=>{if(e.target.id==='focal'){focal=e.target.value;
 function pairSum(l){let s=0;for(let i=0;i<l.length;i++)for(let j=i+1;j<l.length;j++)s+=pairW(l[i].unit,l[j].unit);return s}
 let prevAssign=null;
 function fillSg(){
- const s=$('sgMet'),ok=cols.filter(c=>!/per \$1/i.test(c)&&!/ per /i.test(c)),k=ok.join('|');
+ const s=$('sgMet'),ok=cols,k=ok.join('|');
  if(s.dataset.k===k)return;
  const v=s.value;
  s.innerHTML='<option value="">No balance target</option>'+ok.map(c=>`<option>${esc(c)}</option>`).join('');
