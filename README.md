@@ -12,13 +12,11 @@ You can also open `index.html` directly in a browser.
 
 This repository started as a copy of [TFCRE-College-Selector](https://github.com/rbbass/TFCRE-College-Selector). To bring in later changes from it: `git fetch upstream && git merge upstream/main`.
 
-The page loads the SheetJS library from cdnjs to read Excel files, so it needs internet access the first time it opens.
+## Department data
 
-## Built-in data
+The department data comes from `Input Files/Departments and Attributes.xlsx` (first sheet, columns A to O) and is built into the page; users cannot upload their own. The free-text notes in column P are not included.
 
-The page opens with the data from `Input Files/Departments and Attributes.xlsx` (first sheet, columns A to O) already loaded. **Reload built-in data** restores it after you upload something else. The free-text notes in column P are not included.
-
-To update the built-in data, save the new spreadsheet over `Input Files/Departments and Attributes.xlsx` and run:
+To update the data, save the new spreadsheet over `Input Files/Departments and Attributes.xlsx` and run:
 
 ```
 python tools/update_data.py
@@ -26,9 +24,7 @@ python tools/update_data.py
 
 It rewrites the `DATA` array near the top of the script in `index.html`. Pass a different path to read another file. It needs `openpyxl` (`pip install openpyxl`).
 
-## Uploading other data
-
-Uploading a file is optional and replaces the built-in data for the current session. Upload an Excel file (`.xlsx`, `.xls`) or a `.csv`. The first sheet is used.
+The spreadsheet layout the page expects:
 
 | Column | Contents |
 |---|---|
@@ -78,7 +74,7 @@ Plan A,Biology,1,Natural Sciences
 Plan A,,2,College 2
 ```
 
-College number is 1 to 6. Department names are matched to the loaded data ignoring capitalization. Files that hold several plans also load: "Add plan files" imports them all, and "Load a stored plan" uses the first.
+College number is 1 to 6. Department names are matched to the department list ignoring capitalization. Files that hold several plans also load: "Add plan files" imports them all, and "Load a stored plan" uses the first.
 
 ## Where data is kept
 
@@ -90,7 +86,7 @@ Departmental financial and enrollment data can be sensitive. The built-in data i
 
 ## Development
 
-The whole app is `index.html`: markup, styles and script in one file, with no dependencies beyond SheetJS from a CDN. Edit it and reload.
+The whole app is `index.html`: markup, styles and script in one file, with no external dependencies. Edit it and reload.
 
 Notes for working on it:
 

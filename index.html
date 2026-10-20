@@ -78,9 +78,7 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
 
 <div class="card">
   <div class="bar">
-    <input type="file" id="file" accept=".xlsx,.xls,.csv">
     <input type="search" id="q" placeholder="Filter units…">
-    <button class="ghost" id="sample">Reload built-in data</button>
     <span id="msg"></span>
   </div>
 </div>
@@ -141,7 +139,6 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
 </div>
 </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 const DATA=[
 ["Unit", "College", "# Faculty TT (202504, IR0020)", "# Faculty NTTF (202504, IR0020)", "# Faculty PT (202504, IR0020)", "# GAs (paid lines) (202504, IR0020)", "Total SCH (202504, IR0020)", "number of UG Students major headcount", "number of Grad students headcount", "Research Expenditures FY26", "Proposal, Sum of % Credit, FY26", "Proposal, Prorated Total $ Requested, FY26", "NET (FY25 RCAT, $)", "Direct Exp. per $1 Revenue (FY25 RCAT)", "Total Exp. per $1 Revenue (FY25 RCAT)"],
@@ -245,17 +242,6 @@ function table(rs){
 }
 
 function say(t){$('msg').textContent=t}
-$('file').onchange=e=>{
-  const f=e.target.files[0];if(!f)return;
-  const rd=new FileReader();
-  rd.onload=ev=>{try{
-    const wb=XLSX.read(ev.target.result,{type:'array'});
-    const aoa=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:true});
-    load(aoa.filter(r=>r.some(c=>c!=='')));say(f.name+' loaded ('+rows.length+' units)');
-  }catch(err){say('Could not read that file: '+err.message)}};
-  rd.readAsArrayBuffer(f);
-};
-$('sample').onclick=()=>{load(DATA);say('Built-in data reloaded ('+rows.length+' units)')};
 const NB=6;let assign={},names=Array.from({length:NB},(_,i)=>'College '+(i+1)),sel=null;
 function save(){try{localStorage.setItem('college-v1',JSON.stringify({assign,names}))}catch(e){}}
 function restore(){try{const s=JSON.parse(localStorage.getItem('college-v1')||'null');if(s){assign=s.assign||{};if(Array.isArray(s.names)&&s.names.length===NB)names=s.names}}catch(e){}}
@@ -508,7 +494,7 @@ $('aFile').onchange=async e=>{
   if(!A||!B||A===B||w===''||!AW.includes(Wt)){skip++;continue}
   (na[A]=na[A]||{})[B]=Wt;ok++;
  }
- if(!ok){say('No usable rows in '+f.name+'. Expected columns: Department, Related department, Weight (0, 1, 4 or 8), with department names matching your data file.');return}
+ if(!ok){say('No usable rows in '+f.name+'. Expected columns: Department, Related department, Weight (0, 1, 4 or 8), with department names matching the department list.');return}
  prevAff=JSON.parse(JSON.stringify(aff));aff=na;saveAff();$('aUndo').disabled=false;render();
  say(`Loaded ${ok} affinity ratings from ${f.name}`+(skip?` (${skip} rows skipped: unknown department or invalid weight)`:'')+'. Your previous ratings were replaced; use Undo load to restore them.');
 };
@@ -540,7 +526,7 @@ $('pFile').onchange=async e=>{
  const pc=Object.keys(np).length;
  if(!pc){say('No usable rows found. Expected columns: Plan, Department, College number (1 to '+NB+'), College name.');return}
  prevPlans=JSON.parse(JSON.stringify(plans));Object.assign(plans,np);sp();$('pUndo').disabled=false;renderPlans();
- say(`Added ${pc} plan${pc>1?'s':''} from ${fs.length} file${fs.length>1?'s':''} (${ok} department placements)`+(skip?`; ${skip} rows skipped: unknown department or invalid college number`:'')+(ok===0?'. No departments matched, so check that your data file is loaded':'')+'. Plans with the same name were replaced; use Undo load to restore.');
+ say(`Added ${pc} plan${pc>1?'s':''} from ${fs.length} file${fs.length>1?'s':''} (${ok} department placements)`+(skip?`; ${skip} rows skipped: unknown department or invalid college number`:'')+(ok===0?'. No departments matched the department list':'')+'. Plans with the same name were replaced; use Undo load to restore.');
 };
 $('pUndo').onclick=()=>{if(!prevPlans)return;plans=prevPlans;prevPlans=null;sp();cmpSel=new Set([...cmpSel].filter(k=>k==='__cur'||plans[k]));renderPlans();$('pUndo').disabled=true;say('Restored your previous saved plans.')};
 let prevWork=null;
@@ -551,7 +537,7 @@ $('lpFile').onchange=async e=>{
  const ks=Object.keys(r.np);
  if(!ks.length){say('No usable rows in '+f.name+'. Expected columns: Plan, Department, College number (1 to '+NB+'), College name.');return}
  const k=ks[0],p=r.np[k],n=Object.keys(p.assign).length;
- if(!n){say('None of the departments in '+f.name+' match your data file. Load your data file first.');return}
+ if(!n){say('None of the departments in '+f.name+' match the department list.');return}
  prevWork={assign:{...assign},names:[...names]};
  assign={...p.assign};names=nm6(p.names);sel=null;save();colleges();$('lpUndo').disabled=false;
  say(`Loaded "${k}" (${n} departments) as your working arrangement`+(ks.length>1?`. The file holds ${ks.length} plans, so only the first was used; use "Add plan files" in the Plans box to import them all`:'')+(r.skip?`. ${r.skip} rows skipped: unknown department`:'')+'. Use Undo load to restore your previous arrangement.');
@@ -560,5 +546,5 @@ $('lpUndo').onclick=()=>{if(!prevWork)return;assign=prevWork.assign;names=prevWo
 $('aDef').checked=useDef;
 $('aDef').onchange=()=>{useDef=$('aDef').checked;try{localStorage.setItem('affdef-v1',useDef?'1':'0')}catch(e){}render()};
 $('q').oninput=render;
-load(DATA);say('Showing built-in department data ('+rows.length+' units). Upload a file only to use different data.');
+load(DATA);say('Showing department data ('+rows.length+' units)');
 </script></body></html>
