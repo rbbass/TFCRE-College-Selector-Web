@@ -1,6 +1,6 @@
 # TFCRE College Selector
 
-A single-page tool for exploring how a university's academic departments could be regrouped into six new colleges. You load a spreadsheet of departments and their data, rate how closely departments relate to one another, then build, score and compare college plans.
+A single-page tool for exploring how a university's academic departments could be regrouped into six new colleges. The department data is built into the page, so you can start right away: rate how closely departments relate to one another, then build, score and compare college plans.
 
 Everything runs in the browser. There is no server and no build step, and nothing leaves your machine unless you save a file.
 
@@ -14,17 +14,27 @@ This repository started as a copy of [TFCRE-College-Selector](https://github.com
 
 The page loads the SheetJS library from cdnjs to read Excel files, so it needs internet access the first time it opens.
 
-## Input file
+## Built-in data
 
-Upload an Excel file (`.xlsx`, `.xls`) or a `.csv`. The first sheet is used.
+The page opens with the data from `Input Files/Departments and Attributes.xlsx` (first sheet, columns A to O) already loaded. **Reload built-in data** restores it after you upload something else. The free-text notes in column P are not included.
+
+To update the built-in data, save the new spreadsheet over `Input Files/Departments and Attributes.xlsx` and run:
+
+```
+python tools/update_data.py
+```
+
+It rewrites the `DATA` array near the top of the script in `index.html`. Pass a different path to read another file. It needs `openpyxl` (`pip install openpyxl`).
+
+## Uploading other data
+
+Uploading a file is optional and replaces the built-in data for the current session. Upload an Excel file (`.xlsx`, `.xls`) or a `.csv`. The first sheet is used.
 
 | Column | Contents |
 |---|---|
 | A | Department (unit) name. Rows without a name are ignored. |
 | B | Current college (optional). Detected when the header contains "college", "school" or "division", or when most values are text. |
 | Remaining columns | Numbers: faculty counts, student credit hours (SCH), headcounts, research and financial figures, and so on. `$`, `,` and `%` are handled; blanks count as missing. |
-
-The page opens with a small built-in sample so you can try it before loading real data.
 
 Some calculated columns are added when matching headers are present:
 
@@ -72,11 +82,11 @@ College number is 1 to 6. Department names are matched to the loaded data ignori
 
 ## Where data is kept
 
-Working state is saved in the browser's local storage, so it is private to one browser on one device: college assignments, saved plans, affinity ratings and the defaults setting. Clearing site data erases it. Use the CSV save buttons for backups and to share work with colleagues, who load the same Excel file and then your CSVs.
+Working state is saved in the browser's local storage, so it is private to one browser on one device: college assignments, saved plans, affinity ratings and the defaults setting. Clearing site data erases it. Use the CSV save buttons for backups and to share work with colleagues, who load your CSVs.
 
 ## Data privacy
 
-Departmental financial and enrollment data can be sensitive. Do not commit your data files to this repository. The `.gitignore` excludes spreadsheets and a `data/` folder to help prevent that.
+Departmental financial and enrollment data can be sensitive. The built-in data is part of `index.html`, so anyone who can open the hosted page can see it. The `.gitignore` still excludes spreadsheets and a `data/` folder so other data files are not committed by accident.
 
 ## Development
 

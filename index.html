@@ -80,7 +80,7 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
   <div class="bar">
     <input type="file" id="file" accept=".xlsx,.xls,.csv">
     <input type="search" id="q" placeholder="Filter units…">
-    <button class="ghost" id="sample">Reload sample</button>
+    <button class="ghost" id="sample">Reload built-in data</button>
     <span id="msg"></span>
   </div>
 </div>
@@ -143,21 +143,64 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const SAMPLE=[
-["Unit","# Faculty TT (202504, IR0020)","# Faculty NTTF (202504, IR0020)","# Faculty PT (202504, IR0020)","# GAs (paid lines) (202504, IR0020)","Total SCH (202504, IR0020)","number of UG Students major headcount","number of Grad students headcount","Research Expenditures FY26","Proposal, Sum of % Credit, FY26","Proposal, Prorated Total $ Requested, FY26","NET (FY25 RCAT, $)","Direct Exp. per $1 Revenue (FY25 RCAT)","Total Exp. per $1 Revenue (FY25 RCAT)"],
-["Earth, Environment & Society","29","7","12","2","8,741","405","156","$3,996,941","75.6","$13,228,599","-$1,132,280","",""],
-["Biology","13","4","1","0","5409","589","38","$2,919,621","14.5","$7,302,139","-$366,664","0.58","1.04"],
-["Chemistry","9","3","1","0","5574","204","32","$1,940,275","17.3","$20,967,285","-$238,958","0.63","1.04"],
-["Physics","6","1","1","5","2650","56","25","$231,642","2.0","$481,405","-$341,986","0.75","1.11"],
-["Mathematics and Statistics","25","8","11","18","8740","202","103","$1,353,376","13.0","$4,167,560","-$996,606","0.74","1.11"],
-["Applied Linguistics","6","0","0","0","794","79","19","0","0","$0","-$659,660","0.97","1.46"],
-["Psychology","12","4","16","5","8396","952","40","$1,451,891","7","$1,637,089","$1,586,373","0.41","0.86"],
-["Sociology","9","1","1","","2383","127","32","0","5.8","$2,616,267","$141,834","0.59","0.96"],
-["Speech & Hearing Sciences","6","4","6","","2254","156","79","$368,288","6","$2,623,671","$31,422","0.62","0.99"],
-["Black Studies","3","1","7","","2316","6","2","$20,000","2.3","$76,248","$120,657","0.67","0.93"],
-["Chicanx/Latinx Studies","2","0","5","","1272","5","","0","0","$0","-$98,045","0.85","1.12"],
-["Communication","3","3","2","","2312","139","15","$34,846","0","$0","$607,178","0.43","0.8"],
-["Conflict Resolution","","","","","","9","10","","","","-$226,846","0.9","1.25"]];
+const DATA=[
+["Unit", "College", "# Faculty TT (202504, IR0020)", "# Faculty NTTF (202504, IR0020)", "# Faculty PT (202504, IR0020)", "# GAs (paid lines) (202504, IR0020)", "Total SCH (202504, IR0020)", "number of UG Students major headcount", "number of Grad students headcount", "Research Expenditures FY26", "Proposal, Sum of % Credit, FY26", "Proposal, Prorated Total $ Requested, FY26", "NET (FY25 RCAT, $)", "Direct Exp. per $1 Revenue (FY25 RCAT)", "Total Exp. per $1 Revenue (FY25 RCAT)"],
+["Earth, Environment & Society", "CLAS-Natural Sciences", 29, 7, 12, 2, 8741, 405, 156, 3996941, 75.6, 13228599, -1132280, "", ""],
+["Biology", "CLAS-Natural Sciences", 13, 4, 1, 0, 5409, 589, 38, 2919621, 14.5, 7302139, -366664, 0.58, 1.04],
+["Chemistry", "CLAS-Natural Sciences", 9, 3, 1, 0, 5574, 204, 32, 1940275, 17.3, 20967285, -238958, 0.63, 1.04],
+["Physics", "CLAS-Natural Sciences", 6, 1, 1, 5, 2650, 56, 25, 231642, 2, 481405, -341986, 0.75, 1.11],
+["Mathematics and Statistics", "CLAS-Natural Sciences", 25, 8, 11, 18, 8740, 202, 103, 1353376, 13, 4167560, -996606, 0.74, 1.11],
+["Applied Linguistics", "CLAS - Social Sciences", 6, 0, 0, 0, 794, 79, 19, 0, 0, 0, -659660, 0.97, 1.46],
+["Psychology", "CLAS - Social Sciences", 12, 4, 16, 5, 8396, 952, 40, 1451891.26, 7, 1637089, 1586373, 0.41, 0.86],
+["Sociology", "CLAS - Social Sciences", 9, 1, 1, "", 2383, 127, 32, 0, 5.8, 2616267, 141834, 0.59, 0.96],
+["Speech & Hearing Sciences", "CLAS - Social Sciences", 6, 4, 6, "", 2254, 156, 79, 368288, 6, 2623671, 31422, 0.62, 0.99],
+["Black Studies", "CLAS - Humanities", 3, 1, 7, "", 2316, 6, 2, 20000, 2.3, 76248, 120657, 0.67, 0.93],
+["Chicanx/Latinx Studies", "CLAS - Humanities", 2, 0, 5, "", 1272, 5, "", 0, 0, 0, -98045, 0.85, 1.12],
+["Communication", "CLAS - Humanities", 3, 3, 2, "", 2312, 139, 15, 34846, 0, 0, 607178, 0.43, 0.8],
+["English", "CLAS - Humanities", 17, 7, 28, 4, 6487, 341, 88, 0, 0.2, 300000, -914165, 0.73, 1.11],
+["History", "CLAS - Humanities", 10, 1, 0, "", 2169, 137, 22, 0, 0.2, 300000, -934791, 0.92, 1.29],
+["Judaic Studies", "CLAS - Humanities", 3, 1, 0, "", 476, 4, "", 0, 0, 0, -553343, 4.97, 5.62],
+["Liberal Arts & Sci", "CLAS - Humanities", "", "", "", "", "", 872, 3, "", "", "", "", "", ""],
+["Indigenous Nations Studies", "CLAS - Humanities", 1, 3, 2, "", 810, 11, "", 134780, 1.9, 514780, -4863, 0.59, 1.01],
+["Philosophy", "CLAS - Humanities", 7, 1, 1, "", 1830, 58, "", 0, 1, 72559, -304803, 0.83, 1.12],
+["Women, Gender & Sexuality Studies", "CLAS - Humanities", 3, 1, 7, "", 1491, 19, "", 0, 0.7, 313750, 305417, 0.6, 0.85],
+["World Languages & Literatures", "CLAS - Humanities", 16, 10, 21, 4, 7381, 94, 9, 449000, 0, 0, -663678, 0.79, 1.09],
+["CLAS Humanities - Other", "CLAS - Humanities", "", "", "", "", "", "", "", 644490, 79.6, 14742582, "", "", ""],
+["Criminology and Criminal Justice", "CUPA", 8, 1, 9, "", 4692, 410, 28, 249210, 2, 57457, 639842, 0.5, 0.89],
+["Economics", "CUPA", 10, 1, 2, "", 3001, 90, 14, 76726, 2.3, 1207648, -788692, 0.93, 1.26],
+["Politics and Global Affairs", "CUPA", 11, 3, 2, "", 3238, 272, 14, 0, 0, 0, 124381, 0.61, 0.97],
+["Public Administration", "CUPA", 7, 2, 4, "", 850, "", 144, 0, 0, 0, -833128, 1.02, 1.39],
+["Urban Studies and Planning", "CUPA", 10, 4, 8, "", 3135, 87, 113, 154883, 0, 0, 383402, 0.55, 0.9],
+["Other CUPA Centers & Institutes", "CUPA", "", "", "", "", "", "", "", 8848927.25, 26.35, 8819905, "", "", ""],
+["Child, Family, Youth", "School of Social Work", 3, 2, 18, 0, 3900, 171, "", 2298145, 2, 4077790, "", "", ""],
+["SSW RRI Regional Research Institutes", "School of Social Work", "", 1, "", "", 19, "", "", 13602583, 30.3, 11821097, "", "", ""],
+["Social Work", "School of Social Work", 13, 13, 68, 1, 10186, 437, 764, 7488, 1.1, 44691, "", "", ""],
+["Human Services", "School of Social Work", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+["Civil & Environmental Engineering", "Engineering and Computer Science", 12, 4, 2, 1, 2377, 261, 49, 2014498.83, 42.8, 10539235, -741730, 0.75, 1.15],
+["Computer Science", "Engineering and Computer Science", 20, 9, 5, 1, 6109, 740, 184, -42520.56, 26.26, 9363742, 415532, 0.57, 0.97],
+["Electrical & Computer Engineering", "Engineering and Computer Science", 12, 8, 5, 1, 4041, 372, 325, 1285583, 19.65, 10434767, 2618578, 0.45, 0.79],
+["Engineering & Technology Management", "Engineering and Computer Science", 4, 0, 3, 0, 558, 0, "", 0, 0.5, 2499286, 168903, 0.61, 0.9],
+["Mechanical & Materials Engineering", "Engineering and Computer Science", 10, 2, 6, 0, 2284, 318, 85, 2745002, 13, 4637730, 1191279, 0.45, 0.83],
+["Other MCECS", "Engineering and Computer Science", "", "", "", "", "", "", "", 346043.86, 8.51, 4006224, "", "", ""],
+["Educator Licensure", "College of Education", 9, 3, 3, "", 1206, 176, 216, 0, 0, 0, "", "", ""],
+["Field Placement & Partnerships", "College of Education", 0, 0, 1, "", 12, "", "", "", "", "", "", "", ""],
+["Leadership, Learning & Counseling", "College of Education", 22, 9, 22, "", 6197, 6, 557, "", "", "", "", "", ""],
+["Other Funded COE Units", "College of Education", "", "", "", "", "", "", "", 10674954, 21.1, 25120446, "", "", ""],
+["School of Art + Design (and Art History)", "College of the Arts", 18, 1, 32, 4, 7478, 741, 13, 106381, 3.34, 445740, -684964, 0.68, 1.18],
+["School of Architecture", "College of the Arts", 7, 2, 8, 1, 2392, 254, 50, 0, 0, 0, -360660, 0.53, 1.04],
+["School of Film", "College of the Arts", 7, 2, 4, "", 1677, 210, 0, 0, 1, 106654, -369902, 0.66, 1.15],
+["School of Music + Theater", "College of the Arts", 22, 6, 53, 4, 5381, 385, 21, 0, 0, 0, -1894614, "", ""],
+["Accounting", "School of Business", 4, 3, 10, "", 3883, 706, 0, "", "", "", "", "", ""],
+["Business Admin", "School of Business", 9, 10, 40, "", 13785, 426, 291, "", "", "", "", "", ""],
+["Business Tech & Analytics", "School of Business", 2, 1, 2, "", 793, "", "", "", "", "", "", "", ""],
+["Finance", "School of Business", 4, 1, 4, "", 1302, 357, 29, "", "", "", "", "", ""],
+["Supply & Logistics", "School of Business", 0, 3, 8, "", 1097, "", 44, "", "", "", "", "", ""],
+["Management", "School of Business", 1, 3, 13, "", 2391, 562, 4, "", "", "", "", "", ""],
+["Marketing", "School of Business", 3, 3, 6, "", 2176, 452, 0, "", "", "", "", "", ""],
+["SB & SB Office of the Dean", "School of Business", "", "", "", "", "", "", "", 1029000, 4, 1249804, "", "", ""],
+["Pub Health Ed", "School of Public Health", 14, 4, 25, "", 6469, 834, 3, 26467, 0, 0, "", "", ""],
+["Health Management & Policy", "School of Public Health", "", "", "", "", "", 0, 1, "", "", "", "", "", ""],
+["Other SOPH Funding", "School of Public Health", "", "", "", "", "", "", "", 207311, 7.7, 3405976, "", "", ""]];
 
 let cols=[],rows=[],sortC=null,dir=-1,hasCol=false,cOrder=[],rowBy=new Map();
 const hue=c=>Math.round(Math.max(0,cOrder.indexOf(c))*137.508+20)%360;
@@ -212,7 +255,7 @@ $('file').onchange=e=>{
   }catch(err){say('Could not read that file: '+err.message)}};
   rd.readAsArrayBuffer(f);
 };
-$('sample').onclick=()=>{load(SAMPLE);say('Sample loaded')};
+$('sample').onclick=()=>{load(DATA);say('Built-in data reloaded ('+rows.length+' units)')};
 const NB=6;let assign={},names=Array.from({length:NB},(_,i)=>'College '+(i+1)),sel=null;
 function save(){try{localStorage.setItem('college-v1',JSON.stringify({assign,names}))}catch(e){}}
 function restore(){try{const s=JSON.parse(localStorage.getItem('college-v1')||'null');if(s){assign=s.assign||{};if(Array.isArray(s.names)&&s.names.length===NB)names=s.names}}catch(e){}}
@@ -517,5 +560,5 @@ $('lpUndo').onclick=()=>{if(!prevWork)return;assign=prevWork.assign;names=prevWo
 $('aDef').checked=useDef;
 $('aDef').onchange=()=>{useDef=$('aDef').checked;try{localStorage.setItem('affdef-v1',useDef?'1':'0')}catch(e){}render()};
 $('q').oninput=render;
-load(SAMPLE);say('Showing sample data. Upload your .xlsx to use all rows.');
+load(DATA);say('Showing built-in department data ('+rows.length+' units). Upload a file only to use different data.');
 </script></body></html>
