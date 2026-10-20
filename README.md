@@ -6,8 +6,11 @@ Everything runs in the browser. There is no server and no build step, and nothin
 
 ## Running it
 
-- Open `index.html` in a browser, or
-- Publish it with GitHub Pages (Settings, Pages, deploy from the `main` branch, root folder).
+The hosted version is at **https://rbbass.github.io/TFCRE-College-Selector-Web/**. It is published with GitHub Pages from the `main` branch, root folder, so pushing to `main` updates the site.
+
+You can also open `index.html` directly in a browser.
+
+This repository started as a copy of [TFCRE-College-Selector](https://github.com/rbbass/TFCRE-College-Selector). To bring in later changes from it: `git fetch upstream && git merge upstream/main`.
 
 The page loads the SheetJS library from cdnjs to read Excel files, so it needs internet access the first time it opens.
 
