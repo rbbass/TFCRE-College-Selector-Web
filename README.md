@@ -16,13 +16,13 @@ This repository started as a copy of [TFCRE-College-Selector](https://github.com
 
 The department data comes from `Input Files/Departments and Attributes.xlsx` (first sheet, columns A to O) and is built into the page; users cannot upload their own. The free-text notes in column P are not included.
 
-To update the data, save the new spreadsheet over `Input Files/Departments and Attributes.xlsx` and run:
+To update the data, save the new spreadsheet over `Input Files/Departments and Attributes.xlsx`, put the plan CSVs to build in into `College Plans`, and run:
 
 ```
 python tools/update_data.py
 ```
 
-It rewrites the `DATA` array near the top of the script in `index.html`. Pass a different path to read another file. It needs `openpyxl` (`pip install openpyxl`).
+It rewrites the `DATA` and `PLANS` arrays near the top of the script in `index.html`. Pass a different path to read another file. It needs `openpyxl` (`pip install openpyxl`).
 
 The spreadsheet layout the page expects:
 
@@ -48,7 +48,7 @@ Text in parentheses in a header is dropped from the display name.
 - A summary table shows the sum of every column for each new college, plus the affinity kept inside each college.
 - **Suggest from affinity** groups the departments automatically to keep high-affinity departments together. Options: how even the college sizes must be, an optional financial balance (keep each college's total for a chosen column within a tolerance of the average), and whether to keep departments you have already placed. **Undo suggestion** restores the previous arrangement.
 - **Load a stored plan** opens a plan CSV as the working arrangement.
-- **Plans**: save the current arrangement, tick two or more plans to compare them on any column (balance table and side-by-side bars), and save each plan as its own CSV.
+- **Plans**: the plans in the `College Plans` folder (currently Cudd's Model and Model 4) are built in, marked "built-in", and cannot be deleted. Save the current arrangement, tick two or more plans to compare them on any column (balance table and side-by-side bars), and save each plan as its own CSV.
 
 ### Department affinity tab
 - Pick a department, then drag every other department into one of four nested squares: little, some, moderate or high affinity (weights 0, 1, 4 and 8, used internally).
@@ -78,7 +78,7 @@ College number is 1 to 6. Department names are matched to the department list ig
 
 ## Where data is kept
 
-Working state is saved in the browser's local storage, so it is private to one browser on one device: college assignments, saved plans, affinity ratings and the defaults setting. Clearing site data erases it. Use the CSV save buttons for backups and to share work with colleagues, who load your CSVs.
+Working state is saved in the browser's local storage, so it is private to one browser on one device: college assignments, plans you save, affinity ratings and the defaults setting. Clearing site data erases it. Use the CSV save buttons for backups and to share work with colleagues, who load your CSVs.
 
 ## Data privacy
 
