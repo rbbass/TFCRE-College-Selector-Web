@@ -1,0 +1,445 @@
+Department,Related department,Weight
+"Earth, Environment & Society",Biology,8
+"Earth, Environment & Society",Chemistry,8
+"Earth, Environment & Society",Physics,4
+"Earth, Environment & Society",Mathematics and Statistics,1
+"Earth, Environment & Society",Civil & Environmental Engineering,1
+Biology,"Earth, Environment & Society",8
+Biology,Chemistry,4
+Biology,Physics,4
+Biology,Mathematics and Statistics,4
+Chemistry,"Earth, Environment & Society",8
+Chemistry,Biology,4
+Chemistry,Physics,4
+Chemistry,Mathematics and Statistics,4
+Chemistry,Civil & Environmental Engineering,4
+Chemistry,Mechanical & Materials Engineering,4
+Physics,"Earth, Environment & Society",4
+Physics,Biology,4
+Physics,Chemistry,4
+Physics,Mathematics and Statistics,8
+Physics,Civil & Environmental Engineering,4
+Physics,Electrical & Computer Engineering,8
+Physics,Mechanical & Materials Engineering,4
+Physics,School of Architecture,0
+Mathematics and Statistics,"Earth, Environment & Society",1
+Mathematics and Statistics,Biology,4
+Mathematics and Statistics,Chemistry,4
+Mathematics and Statistics,Physics,8
+Mathematics and Statistics,Civil & Environmental Engineering,4
+Mathematics and Statistics,Computer Science,8
+Mathematics and Statistics,Electrical & Computer Engineering,8
+Mathematics and Statistics,Mechanical & Materials Engineering,8
+Mathematics and Statistics,Accounting,1
+Mathematics and Statistics,Business Tech & Analytics,1
+Mathematics and Statistics,Finance,1
+Applied Linguistics,Psychology,8
+Applied Linguistics,Sociology,1
+Applied Linguistics,Speech & Hearing Sciences,4
+Applied Linguistics,Computer Science,1
+Psychology,Applied Linguistics,8
+Psychology,Sociology,8
+Psychology,Speech & Hearing Sciences,4
+Psychology,"Child, Family, Youth",1
+Psychology,Social Work,1
+Psychology,Human Services,1
+Sociology,Applied Linguistics,1
+Sociology,Psychology,8
+Sociology,Speech & Hearing Sciences,4
+Sociology,"Child, Family, Youth",4
+Sociology,Social Work,1
+Sociology,Human Services,1
+Speech & Hearing Sciences,Applied Linguistics,4
+Speech & Hearing Sciences,Psychology,4
+Speech & Hearing Sciences,Sociology,4
+Speech & Hearing Sciences,Pub Health Ed,4
+Speech & Hearing Sciences,Health Management & Policy,1
+Black Studies,Chicanx/Latinx Studies,8
+Black Studies,Communication,4
+Black Studies,Conflict Resolution,4
+Black Studies,English,4
+Black Studies,History,4
+Black Studies,Judaic Studies,4
+Black Studies,Liberal Arts & Sci,4
+Black Studies,Indigenous Nations Studies,8
+Black Studies,Philosophy,4
+Black Studies,"Women, Gender & Sexuality Studies",8
+Black Studies,World Languages & Literatures,4
+Black Studies,CLAS Humanities - Other,8
+Chicanx/Latinx Studies,Black Studies,8
+Chicanx/Latinx Studies,Communication,4
+Chicanx/Latinx Studies,Conflict Resolution,4
+Chicanx/Latinx Studies,English,4
+Chicanx/Latinx Studies,History,4
+Chicanx/Latinx Studies,Judaic Studies,4
+Chicanx/Latinx Studies,Liberal Arts & Sci,4
+Chicanx/Latinx Studies,Indigenous Nations Studies,8
+Chicanx/Latinx Studies,Philosophy,4
+Chicanx/Latinx Studies,"Women, Gender & Sexuality Studies",8
+Chicanx/Latinx Studies,World Languages & Literatures,4
+Chicanx/Latinx Studies,CLAS Humanities - Other,8
+Communication,Black Studies,4
+Communication,Chicanx/Latinx Studies,4
+Communication,Conflict Resolution,4
+Communication,English,4
+Communication,History,4
+Communication,Judaic Studies,4
+Communication,Liberal Arts & Sci,4
+Communication,Indigenous Nations Studies,4
+Communication,Philosophy,8
+Communication,"Women, Gender & Sexuality Studies",4
+Communication,World Languages & Literatures,4
+Communication,CLAS Humanities - Other,8
+Conflict Resolution,Black Studies,4
+Conflict Resolution,Chicanx/Latinx Studies,4
+Conflict Resolution,Communication,4
+Conflict Resolution,English,4
+Conflict Resolution,History,4
+Conflict Resolution,Judaic Studies,4
+Conflict Resolution,Liberal Arts & Sci,4
+Conflict Resolution,Indigenous Nations Studies,4
+Conflict Resolution,Philosophy,4
+Conflict Resolution,"Women, Gender & Sexuality Studies",4
+Conflict Resolution,World Languages & Literatures,4
+Conflict Resolution,CLAS Humanities - Other,1
+Conflict Resolution,Criminology and Criminal Justice,1
+English,Black Studies,4
+English,Chicanx/Latinx Studies,4
+English,Communication,4
+English,Conflict Resolution,4
+English,History,4
+English,Judaic Studies,4
+English,Liberal Arts & Sci,4
+English,Indigenous Nations Studies,4
+English,Philosophy,4
+English,"Women, Gender & Sexuality Studies",4
+English,World Languages & Literatures,8
+English,CLAS Humanities - Other,8
+History,Black Studies,4
+History,Chicanx/Latinx Studies,4
+History,Communication,4
+History,Conflict Resolution,4
+History,English,4
+History,Judaic Studies,8
+History,Liberal Arts & Sci,4
+History,Indigenous Nations Studies,4
+History,Philosophy,4
+History,"Women, Gender & Sexuality Studies",4
+History,World Languages & Literatures,4
+History,CLAS Humanities - Other,8
+Judaic Studies,Black Studies,4
+Judaic Studies,Chicanx/Latinx Studies,4
+Judaic Studies,Communication,4
+Judaic Studies,Conflict Resolution,4
+Judaic Studies,English,4
+Judaic Studies,History,8
+Judaic Studies,Liberal Arts & Sci,4
+Judaic Studies,Indigenous Nations Studies,4
+Judaic Studies,Philosophy,4
+Judaic Studies,"Women, Gender & Sexuality Studies",4
+Judaic Studies,World Languages & Literatures,4
+Judaic Studies,CLAS Humanities - Other,8
+Liberal Arts & Sci,Black Studies,4
+Liberal Arts & Sci,Chicanx/Latinx Studies,4
+Liberal Arts & Sci,Communication,4
+Liberal Arts & Sci,Conflict Resolution,4
+Liberal Arts & Sci,English,4
+Liberal Arts & Sci,History,4
+Liberal Arts & Sci,Judaic Studies,4
+Liberal Arts & Sci,Indigenous Nations Studies,4
+Liberal Arts & Sci,Philosophy,4
+Liberal Arts & Sci,"Women, Gender & Sexuality Studies",4
+Liberal Arts & Sci,World Languages & Literatures,4
+Liberal Arts & Sci,CLAS Humanities - Other,8
+Indigenous Nations Studies,Black Studies,8
+Indigenous Nations Studies,Chicanx/Latinx Studies,8
+Indigenous Nations Studies,Communication,4
+Indigenous Nations Studies,Conflict Resolution,4
+Indigenous Nations Studies,English,4
+Indigenous Nations Studies,History,4
+Indigenous Nations Studies,Judaic Studies,4
+Indigenous Nations Studies,Liberal Arts & Sci,4
+Indigenous Nations Studies,Philosophy,4
+Indigenous Nations Studies,"Women, Gender & Sexuality Studies",4
+Indigenous Nations Studies,World Languages & Literatures,4
+Indigenous Nations Studies,CLAS Humanities - Other,8
+Philosophy,Black Studies,4
+Philosophy,Chicanx/Latinx Studies,4
+Philosophy,Communication,8
+Philosophy,Conflict Resolution,4
+Philosophy,English,4
+Philosophy,History,4
+Philosophy,Judaic Studies,4
+Philosophy,Liberal Arts & Sci,4
+Philosophy,Indigenous Nations Studies,4
+Philosophy,"Women, Gender & Sexuality Studies",4
+Philosophy,World Languages & Literatures,4
+Philosophy,CLAS Humanities - Other,8
+"Women, Gender & Sexuality Studies",Black Studies,8
+"Women, Gender & Sexuality Studies",Chicanx/Latinx Studies,8
+"Women, Gender & Sexuality Studies",Communication,4
+"Women, Gender & Sexuality Studies",Conflict Resolution,4
+"Women, Gender & Sexuality Studies",English,4
+"Women, Gender & Sexuality Studies",History,4
+"Women, Gender & Sexuality Studies",Judaic Studies,4
+"Women, Gender & Sexuality Studies",Liberal Arts & Sci,4
+"Women, Gender & Sexuality Studies",Indigenous Nations Studies,4
+"Women, Gender & Sexuality Studies",Philosophy,4
+"Women, Gender & Sexuality Studies",World Languages & Literatures,4
+"Women, Gender & Sexuality Studies",CLAS Humanities - Other,8
+World Languages & Literatures,Black Studies,4
+World Languages & Literatures,Chicanx/Latinx Studies,4
+World Languages & Literatures,Communication,4
+World Languages & Literatures,Conflict Resolution,4
+World Languages & Literatures,English,8
+World Languages & Literatures,History,4
+World Languages & Literatures,Judaic Studies,4
+World Languages & Literatures,Liberal Arts & Sci,4
+World Languages & Literatures,Indigenous Nations Studies,4
+World Languages & Literatures,Philosophy,4
+World Languages & Literatures,"Women, Gender & Sexuality Studies",4
+World Languages & Literatures,CLAS Humanities - Other,8
+CLAS Humanities - Other,Black Studies,8
+CLAS Humanities - Other,Chicanx/Latinx Studies,8
+CLAS Humanities - Other,Communication,8
+CLAS Humanities - Other,Conflict Resolution,1
+CLAS Humanities - Other,English,8
+CLAS Humanities - Other,History,8
+CLAS Humanities - Other,Judaic Studies,8
+CLAS Humanities - Other,Liberal Arts & Sci,8
+CLAS Humanities - Other,Indigenous Nations Studies,8
+CLAS Humanities - Other,Philosophy,8
+CLAS Humanities - Other,"Women, Gender & Sexuality Studies",8
+CLAS Humanities - Other,World Languages & Literatures,8
+Criminology and Criminal Justice,Conflict Resolution,1
+Criminology and Criminal Justice,Economics,4
+Criminology and Criminal Justice,Politics and Global Affairs,4
+Criminology and Criminal Justice,Public Administration,4
+Criminology and Criminal Justice,Urban Studies and Planning,4
+Criminology and Criminal Justice,Other CUPA Centers & Institutes,8
+Economics,Criminology and Criminal Justice,4
+Economics,Politics and Global Affairs,4
+Economics,Public Administration,4
+Economics,Urban Studies and Planning,4
+Economics,Other CUPA Centers & Institutes,8
+Economics,Civil & Environmental Engineering,1
+Economics,Electrical & Computer Engineering,0
+Economics,Engineering & Technology Management,1
+Economics,Mechanical & Materials Engineering,1
+Politics and Global Affairs,Criminology and Criminal Justice,4
+Politics and Global Affairs,Economics,4
+Politics and Global Affairs,Public Administration,8
+Politics and Global Affairs,Urban Studies and Planning,4
+Politics and Global Affairs,Other CUPA Centers & Institutes,8
+Public Administration,Criminology and Criminal Justice,4
+Public Administration,Economics,4
+Public Administration,Politics and Global Affairs,8
+Public Administration,Urban Studies and Planning,4
+Public Administration,Other CUPA Centers & Institutes,8
+Public Administration,Social Work,1
+Public Administration,Human Services,1
+Urban Studies and Planning,Criminology and Criminal Justice,4
+Urban Studies and Planning,Economics,4
+Urban Studies and Planning,Politics and Global Affairs,4
+Urban Studies and Planning,Public Administration,4
+Urban Studies and Planning,Other CUPA Centers & Institutes,8
+Other CUPA Centers & Institutes,Criminology and Criminal Justice,8
+Other CUPA Centers & Institutes,Economics,8
+Other CUPA Centers & Institutes,Politics and Global Affairs,8
+Other CUPA Centers & Institutes,Public Administration,8
+Other CUPA Centers & Institutes,Urban Studies and Planning,8
+"Child, Family, Youth",Psychology,1
+"Child, Family, Youth",Sociology,4
+"Child, Family, Youth",SSW RRI Regional Research Institutes,8
+"Child, Family, Youth",Social Work,8
+"Child, Family, Youth",Human Services,8
+"Child, Family, Youth",Pub Health Ed,4
+"Child, Family, Youth",Health Management & Policy,4
+SSW RRI Regional Research Institutes,"Child, Family, Youth",8
+SSW RRI Regional Research Institutes,Social Work,8
+SSW RRI Regional Research Institutes,Human Services,8
+Social Work,Psychology,1
+Social Work,Sociology,1
+Social Work,Public Administration,1
+Social Work,"Child, Family, Youth",8
+Social Work,SSW RRI Regional Research Institutes,8
+Social Work,Human Services,8
+Social Work,Pub Health Ed,4
+Social Work,Health Management & Policy,4
+Human Services,Psychology,1
+Human Services,Sociology,1
+Human Services,Public Administration,1
+Human Services,"Child, Family, Youth",8
+Human Services,SSW RRI Regional Research Institutes,8
+Human Services,Social Work,8
+Human Services,Pub Health Ed,4
+Human Services,Health Management & Policy,4
+Civil & Environmental Engineering,"Earth, Environment & Society",1
+Civil & Environmental Engineering,Chemistry,4
+Civil & Environmental Engineering,Physics,4
+Civil & Environmental Engineering,Mathematics and Statistics,4
+Civil & Environmental Engineering,Economics,1
+Civil & Environmental Engineering,Computer Science,1
+Civil & Environmental Engineering,Electrical & Computer Engineering,1
+Civil & Environmental Engineering,Engineering & Technology Management,1
+Civil & Environmental Engineering,Mechanical & Materials Engineering,8
+Civil & Environmental Engineering,Other MCECS,8
+Civil & Environmental Engineering,School of Architecture,4
+Civil & Environmental Engineering,Management,1
+Computer Science,Mathematics and Statistics,8
+Computer Science,Applied Linguistics,1
+Computer Science,Civil & Environmental Engineering,1
+Computer Science,Electrical & Computer Engineering,8
+Computer Science,Engineering & Technology Management,1
+Computer Science,Mechanical & Materials Engineering,1
+Computer Science,Other MCECS,8
+Electrical & Computer Engineering,Physics,8
+Electrical & Computer Engineering,Mathematics and Statistics,8
+Electrical & Computer Engineering,Economics,0
+Electrical & Computer Engineering,Civil & Environmental Engineering,1
+Electrical & Computer Engineering,Computer Science,8
+Electrical & Computer Engineering,Engineering & Technology Management,1
+Electrical & Computer Engineering,Mechanical & Materials Engineering,4
+Electrical & Computer Engineering,Other MCECS,8
+Electrical & Computer Engineering,School of Architecture,1
+Electrical & Computer Engineering,Management,1
+Engineering & Technology Management,Economics,1
+Engineering & Technology Management,Civil & Environmental Engineering,1
+Engineering & Technology Management,Computer Science,1
+Engineering & Technology Management,Electrical & Computer Engineering,1
+Engineering & Technology Management,Mechanical & Materials Engineering,4
+Engineering & Technology Management,Other MCECS,8
+Engineering & Technology Management,School of Architecture,0
+Engineering & Technology Management,Accounting,4
+Engineering & Technology Management,Business Admin,4
+Engineering & Technology Management,Business Tech & Analytics,8
+Engineering & Technology Management,Supply & Logistics,8
+Engineering & Technology Management,Management,8
+Mechanical & Materials Engineering,Chemistry,4
+Mechanical & Materials Engineering,Physics,4
+Mechanical & Materials Engineering,Mathematics and Statistics,8
+Mechanical & Materials Engineering,Economics,1
+Mechanical & Materials Engineering,Civil & Environmental Engineering,8
+Mechanical & Materials Engineering,Computer Science,1
+Mechanical & Materials Engineering,Electrical & Computer Engineering,4
+Mechanical & Materials Engineering,Engineering & Technology Management,4
+Mechanical & Materials Engineering,Other MCECS,8
+Mechanical & Materials Engineering,School of Architecture,1
+Mechanical & Materials Engineering,Management,1
+Other MCECS,Civil & Environmental Engineering,8
+Other MCECS,Computer Science,8
+Other MCECS,Electrical & Computer Engineering,8
+Other MCECS,Engineering & Technology Management,8
+Other MCECS,Mechanical & Materials Engineering,8
+Educator Licensure,Field Placement & Partnerships,4
+Educator Licensure,"Leadership, Learning & Counseling",4
+Educator Licensure,Other Funded COE Units,8
+Field Placement & Partnerships,Educator Licensure,4
+Field Placement & Partnerships,"Leadership, Learning & Counseling",4
+Field Placement & Partnerships,Other Funded COE Units,8
+"Leadership, Learning & Counseling",Educator Licensure,4
+"Leadership, Learning & Counseling",Field Placement & Partnerships,4
+"Leadership, Learning & Counseling",Other Funded COE Units,8
+Other Funded COE Units,Educator Licensure,8
+Other Funded COE Units,Field Placement & Partnerships,8
+Other Funded COE Units,"Leadership, Learning & Counseling",8
+School of Art + Design (and Art History),School of Architecture,4
+School of Art + Design (and Art History),School of Film,8
+School of Art + Design (and Art History),School of Music + Theater,8
+School of Architecture,Physics,0
+School of Architecture,Civil & Environmental Engineering,4
+School of Architecture,Electrical & Computer Engineering,1
+School of Architecture,Engineering & Technology Management,0
+School of Architecture,Mechanical & Materials Engineering,1
+School of Architecture,School of Art + Design (and Art History),4
+School of Architecture,School of Film,0
+School of Architecture,School of Music + Theater,0
+School of Film,School of Art + Design (and Art History),8
+School of Film,School of Architecture,0
+School of Film,School of Music + Theater,8
+School of Film,Business Admin,1
+School of Music + Theater,School of Art + Design (and Art History),8
+School of Music + Theater,School of Architecture,0
+School of Music + Theater,School of Film,8
+Accounting,Mathematics and Statistics,1
+Accounting,Engineering & Technology Management,4
+Accounting,Business Admin,8
+Accounting,Business Tech & Analytics,8
+Accounting,Finance,8
+Accounting,Supply & Logistics,8
+Accounting,Management,4
+Accounting,Marketing,4
+Accounting,SB & SB Office of the Dean,8
+Business Admin,Engineering & Technology Management,4
+Business Admin,School of Film,1
+Business Admin,Accounting,8
+Business Admin,Business Tech & Analytics,8
+Business Admin,Finance,8
+Business Admin,Supply & Logistics,8
+Business Admin,Management,8
+Business Admin,Marketing,8
+Business Admin,SB & SB Office of the Dean,8
+Business Tech & Analytics,Mathematics and Statistics,1
+Business Tech & Analytics,Engineering & Technology Management,8
+Business Tech & Analytics,Accounting,8
+Business Tech & Analytics,Business Admin,8
+Business Tech & Analytics,Finance,8
+Business Tech & Analytics,Supply & Logistics,8
+Business Tech & Analytics,Management,4
+Business Tech & Analytics,Marketing,4
+Business Tech & Analytics,SB & SB Office of the Dean,8
+Finance,Mathematics and Statistics,1
+Finance,Accounting,8
+Finance,Business Admin,8
+Finance,Business Tech & Analytics,8
+Finance,Supply & Logistics,4
+Finance,Management,4
+Finance,Marketing,4
+Finance,SB & SB Office of the Dean,8
+Supply & Logistics,Engineering & Technology Management,8
+Supply & Logistics,Accounting,8
+Supply & Logistics,Business Admin,8
+Supply & Logistics,Business Tech & Analytics,8
+Supply & Logistics,Finance,4
+Supply & Logistics,Management,4
+Supply & Logistics,Marketing,4
+Supply & Logistics,SB & SB Office of the Dean,8
+Management,Civil & Environmental Engineering,1
+Management,Electrical & Computer Engineering,1
+Management,Engineering & Technology Management,8
+Management,Mechanical & Materials Engineering,1
+Management,Accounting,4
+Management,Business Admin,8
+Management,Business Tech & Analytics,4
+Management,Finance,4
+Management,Supply & Logistics,4
+Management,Marketing,4
+Management,SB & SB Office of the Dean,8
+Marketing,Accounting,4
+Marketing,Business Admin,8
+Marketing,Business Tech & Analytics,4
+Marketing,Finance,4
+Marketing,Supply & Logistics,4
+Marketing,Management,4
+Marketing,SB & SB Office of the Dean,8
+SB & SB Office of the Dean,Accounting,8
+SB & SB Office of the Dean,Business Admin,8
+SB & SB Office of the Dean,Business Tech & Analytics,8
+SB & SB Office of the Dean,Finance,8
+SB & SB Office of the Dean,Supply & Logistics,8
+SB & SB Office of the Dean,Management,8
+SB & SB Office of the Dean,Marketing,8
+Pub Health Ed,Speech & Hearing Sciences,4
+Pub Health Ed,"Child, Family, Youth",4
+Pub Health Ed,Social Work,4
+Pub Health Ed,Human Services,4
+Pub Health Ed,Health Management & Policy,4
+Pub Health Ed,Other SOPH Funding,8
+Health Management & Policy,Speech & Hearing Sciences,1
+Health Management & Policy,"Child, Family, Youth",4
+Health Management & Policy,Social Work,4
+Health Management & Policy,Human Services,4
+Health Management & Policy,Pub Health Ed,4
+Health Management & Policy,Other SOPH Funding,8
+Other SOPH Funding,Pub Health Ed,8
+Other SOPH Funding,Health Management & Policy,8
