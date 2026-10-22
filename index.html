@@ -224,8 +224,9 @@ function load(aoa){
   const o=hasCol?2:1;
   cols=hdr.slice(o);
   rows=body.map(r=>{const v={};cols.forEach((n,i)=>v[n]=num(r[i+o]));return{unit:String(r[0]).trim(),coll:hasCol?(String(r[1]??'').trim()||'(No college listed)'):'',v}});
-  const tt=find(/faculty tt/i),nt=find(/nttf/i),pt=find(/faculty pt/i);
-  if(tt&&nt&&pt){cols.push('Total faculty');rows.forEach(r=>r.v['Total faculty']=sum(r,[tt,nt,pt]))}
+  const tt=find(/faculty tt/i),nt=find(/nttf/i),ug=find(/ug students/i),gr=find(/grad students/i);
+  if(tt&&nt){cols.push('Total # FT Faculty');rows.forEach(r=>r.v['Total # FT Faculty']=sum(r,[tt,nt]))}
+  if(ug&&gr){cols.push('Student Headcount Total');rows.forEach(r=>r.v['Student Headcount Total']=sum(r,[ug,gr]))}
   rowBy=new Map(rows.map(r=>[r.unit,r]));cOrder=[...new Set(rows.map(r=>r.coll))].sort();restore();sortC=null;render();
 }
 
@@ -286,7 +287,7 @@ function allPlans(){const b=builtIn();return Object.keys(b).map(n=>({k:'__b:'+n,
 const lab=x=>x.label;
 function renderPlans(){
  const pm=$('pm');
- if(pm.dataset.k!==cols.join('|')){pm.innerHTML=cols.map(c=>`<option>${esc(c)}</option>`).join('');pm.value=find(/sch/i)||cols[0];pm.dataset.k=cols.join('|')}
+ if(pm.dataset.k!==cols.join('|')){pm.innerHTML=cols.filter(c=>!/^# GAs$|faculty pt/i.test(c)).map(c=>`<option>${esc(c)}</option>`).join('');pm.value=find(/sch/i)||cols[0];pm.dataset.k=cols.join('|')}
  $('pstat').textContent='Built-in plans are always available. Plans you save are kept in this browser only; use "Save CSV" to share one with a colleague.';
  const list=allPlans(),byK={};list.forEach(x=>byK[x.k]=x);
  [...cmpSel].forEach(k=>{if(k!=='__cur'&&!byK[k])cmpSel.delete(k)});

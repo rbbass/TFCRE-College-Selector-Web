@@ -32,7 +32,7 @@ The spreadsheet layout the page expects:
 | B | Current college (optional). Detected when the header contains "college", "school" or "division", or when most values are text. |
 | Remaining columns | Numbers: faculty counts, student credit hours (SCH), headcounts, research and financial figures, and so on. `$`, `,` and `%` are handled; blanks count as missing. |
 
-A **Total faculty** column is added when there are headers containing "Faculty TT", "NTTF" and "Faculty PT".
+Two total columns are added: **Total # FT Faculty** (headers containing "Faculty TT" and "NTTF") and **Student Headcount Total** (headers containing "UG Students" and "Grad students"). The Plans comparison dropdown leaves out # GAs and # Faculty PT.
 
 Text in parentheses in a header is dropped from the display name.
 
