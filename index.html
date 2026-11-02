@@ -215,6 +215,8 @@ const fmt=(n,v)=>{if(v==null)return '–';if(cur(n))return (v<0?'-':'')+'$'+Math
 const short=v=>{const a=Math.abs(v),s=v<0?'-':'';return a>=1e6?s+'$'+(a/1e6).toFixed(1)+'M':a>=1e3?s+'$'+Math.round(a/1e3)+'K':s+'$'+Math.round(a)};
 const sum=(r,names)=>{let t=null;names.forEach(n=>{if(n&&r.v[n]!=null)t=(t||0)+r.v[n]});return t};
 const find=re=>cols.find(c=>re.test(c));
+// Columns shown in the tables but not offered for comparing or balancing plans
+const NOPICK=/^# GAs$|faculty pt/i,pickCols=()=>cols.filter(c=>!NOPICK.test(c));
 
 function load(aoa){
   const hdr=aoa[0].map(clean);
@@ -287,7 +289,7 @@ function allPlans(){const b=builtIn();return Object.keys(b).map(n=>({k:'__b:'+n,
 const lab=x=>x.label;
 function renderPlans(){
  const pm=$('pm');
- if(pm.dataset.k!==cols.join('|')){pm.innerHTML=cols.filter(c=>!/^# GAs$|faculty pt/i.test(c)).map(c=>`<option>${esc(c)}</option>`).join('');pm.value=find(/sch/i)||cols[0];pm.dataset.k=cols.join('|')}
+ if(pm.dataset.k!==cols.join('|')){pm.innerHTML=pickCols().map(c=>`<option>${esc(c)}</option>`).join('');pm.value=find(/sch/i)||cols[0];pm.dataset.k=cols.join('|')}
  $('pstat').textContent='Built-in plans are always available. Plans you save are kept in this browser only; use "Save CSV" to share one with a colleague.';
  const list=allPlans(),byK={};list.forEach(x=>byK[x.k]=x);
  [...cmpSel].forEach(k=>{if(k!=='__cur'&&!byK[k])cmpSel.delete(k)});
@@ -376,7 +378,7 @@ ab.addEventListener('change',e=>{if(e.target.id==='focal'){focal=e.target.value;
 function pairSum(l){let s=0;for(let i=0;i<l.length;i++)for(let j=i+1;j<l.length;j++)s+=pairW(l[i].unit,l[j].unit);return s}
 let prevAssign=null;
 function fillSg(){
- const s=$('sgMet'),ok=cols,k=ok.join('|');
+ const s=$('sgMet'),ok=pickCols(),k=ok.join('|');
  if(s.dataset.k===k)return;
  const v=s.value;
  s.innerHTML='<option value="">No balance target</option>'+ok.map(c=>`<option>${esc(c)}</option>`).join('');
