@@ -40,13 +40,13 @@ Applied Linguistics,Computer Science,1
 Psychology,Applied Linguistics,8
 Psychology,Sociology,8
 Psychology,Speech & Hearing Sciences,4
-Psychology,"Child, Family, Youth",1
+Psychology,"Child, Youth, and Family Studies",1
 Psychology,Social Work,1
 Psychology,Human Services,1
 Sociology,Applied Linguistics,1
 Sociology,Psychology,8
 Sociology,Speech & Hearing Sciences,4
-Sociology,"Child, Family, Youth",4
+Sociology,"Child, Youth, and Family Studies",4
 Sociology,Social Work,1
 Sociology,Human Services,1
 Speech & Hearing Sciences,Applied Linguistics,4
@@ -248,20 +248,20 @@ Other CUPA Centers & Institutes,Economics,8
 Other CUPA Centers & Institutes,Politics and Global Affairs,8
 Other CUPA Centers & Institutes,Public Administration,8
 Other CUPA Centers & Institutes,Urban Studies and Planning,8
-"Child, Family, Youth",Psychology,1
-"Child, Family, Youth",Sociology,4
-"Child, Family, Youth",SSW RRI Regional Research Institutes,8
-"Child, Family, Youth",Social Work,8
-"Child, Family, Youth",Human Services,8
-"Child, Family, Youth",Pub Health Ed,4
-"Child, Family, Youth",Health Management & Policy,4
-SSW RRI Regional Research Institutes,"Child, Family, Youth",8
+"Child, Youth, and Family Studies",Psychology,1
+"Child, Youth, and Family Studies",Sociology,4
+"Child, Youth, and Family Studies",SSW RRI Regional Research Institutes,8
+"Child, Youth, and Family Studies",Social Work,8
+"Child, Youth, and Family Studies",Human Services,8
+"Child, Youth, and Family Studies",Pub Health Ed,4
+"Child, Youth, and Family Studies",Health Management & Policy,4
+SSW RRI Regional Research Institutes,"Child, Youth, and Family Studies",8
 SSW RRI Regional Research Institutes,Social Work,8
 SSW RRI Regional Research Institutes,Human Services,8
 Social Work,Psychology,1
 Social Work,Sociology,1
 Social Work,Public Administration,1
-Social Work,"Child, Family, Youth",8
+Social Work,"Child, Youth, and Family Studies",8
 Social Work,SSW RRI Regional Research Institutes,8
 Social Work,Human Services,8
 Social Work,Pub Health Ed,4
@@ -269,7 +269,7 @@ Social Work,Health Management & Policy,4
 Human Services,Psychology,1
 Human Services,Sociology,1
 Human Services,Public Administration,1
-Human Services,"Child, Family, Youth",8
+Human Services,"Child, Youth, and Family Studies",8
 Human Services,SSW RRI Regional Research Institutes,8
 Human Services,Social Work,8
 Human Services,Pub Health Ed,4
@@ -430,13 +430,13 @@ SB & SB Office of the Dean,Supply & Logistics,8
 SB & SB Office of the Dean,Management,8
 SB & SB Office of the Dean,Marketing,8
 Pub Health Ed,Speech & Hearing Sciences,4
-Pub Health Ed,"Child, Family, Youth",4
+Pub Health Ed,"Child, Youth, and Family Studies",4
 Pub Health Ed,Social Work,4
 Pub Health Ed,Human Services,4
 Pub Health Ed,Health Management & Policy,4
 Pub Health Ed,Other SOPH Funding,8
 Health Management & Policy,Speech & Hearing Sciences,1
-Health Management & Policy,"Child, Family, Youth",4
+Health Management & Policy,"Child, Youth, and Family Studies",4
 Health Management & Policy,Social Work,4
 Health Management & Policy,Human Services,4
 Health Management & Policy,Pub Health Ed,4
