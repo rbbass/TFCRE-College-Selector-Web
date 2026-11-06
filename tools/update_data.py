@@ -41,9 +41,12 @@ def put(page, name, end, body):
 
 
 ws = openpyxl.load_workbook(SRC, data_only=True).worksheets[0]
-rows = [[cell(c) for c in r]
-        # Columns A-L only: M-O (NET and the two "Exp. per $1 Revenue" ratios) are not published, and P holds notes
-        for r in ws.iter_rows(values_only=True, max_col=12)
+# Columns A-M, minus "Research Expenditures FY26" (no longer used). Later columns (NET, the two
+# "Exp. per $1 Revenue" ratios and the notes) are not published.
+header = [cell(c) for c in next(ws.iter_rows(values_only=True, max_row=1, max_col=13))]
+keep = [i for i, h in enumerate(header) if not str(h).lower().startswith("research expenditures")]
+rows = [[cell(r[i]) for i in keep]
+        for r in ws.iter_rows(values_only=True, max_col=13)
         if any(c is not None and str(c).strip() for c in r)]
 
 

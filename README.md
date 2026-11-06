@@ -14,7 +14,7 @@ This repository started as a copy of [TFCRE-College-Selector](https://github.com
 
 ## Department data
 
-The department data comes from `Input Files/Departments and Attributes.xlsx` (first sheet, columns A to L) and is built into the page; users cannot upload their own. Columns M to O (NET and the two "Exp. per $1 Revenue" ratios) and the free-text notes in column P are left out, so they are not in the published page.
+The department data comes from `Input Files/Departments and Attributes.xlsx` (first sheet, columns A to M) and is built into the page; users cannot upload their own. Column J (Research Expenditures FY26) is no longer used and is skipped. Columns N to P (NET and the two "Exp. per $1 Revenue" ratios) and the free-text notes in column Q are left out, so they are not in the published page.
 
 To update the data, save the new spreadsheet over `Input Files/Departments and Attributes.xlsx`, put the plan CSVs to build in into `College Plans` and list their names in `BUILT_IN` at the top of the script, and run:
 
