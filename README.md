@@ -34,7 +34,7 @@ The spreadsheet layout the page expects:
 
 Two total columns are added: **Total # FT Faculty** (headers containing "Faculty TT" and "NTTF") and **Student Headcount Total** (headers containing "UG Students" and "Grad students"). The Plans comparison dropdown and the "Suggest from affinity" balance dropdown leave out # GAs and # Faculty PT.
 
-Text in parentheses in a header is dropped from the display name.
+Text in parentheses in a header is dropped from the display name. Some headers are then renamed for display by the `RENAME` map in `index.html` (the three faculty counts get ", F25"). The two totals are placed right after "# Faculty PT" and "number of Grad students headcount".
 
 ## What it does
 
