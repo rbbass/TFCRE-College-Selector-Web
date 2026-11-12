@@ -70,6 +70,13 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
 .az.z3{background:color-mix(in srgb,var(--ac) 28%,var(--card));border-color:var(--ac)}
 .zl{font-size:12px;font-weight:600;color:var(--mut);margin-bottom:2px}
 .zc{min-height:28px}
+#clwrap{position:relative;max-width:900px;margin:0 auto;border:1px solid var(--bd);border-radius:8px;background:var(--bg)}
+#clsvg .dot{cursor:pointer}
+#clsvg .dot .v{transition:r .1s}
+#clsvg .dot:hover .v,#clsvg .dot.on .v{r:10}
+#clmsg{fill:var(--mut);font-size:14px}
+#cltip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:4px 8px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.15);white-space:nowrap;transform:translate(-50%,-100%);z-index:2}
+#cltip b{display:block;font-size:13px;color:var(--tx)}#cltip span{color:var(--mut)}
 .fc{margin:10px auto 0;max-width:80%;text-align:center;font-weight:700;padding:8px 10px;border:2px solid var(--ac);border-radius:8px;background:var(--card)}
 </style></head>
 <body><main>
@@ -135,6 +142,12 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
   <div class="bar" style="margin-bottom:8px"><button class="ghost" id="aSave">Save affinities (CSV)</button><button class="ghost" id="aLoad">Load affinities (CSV)</button><button class="ghost" id="aUndo" disabled>Undo load</button><input type="file" id="aFile" accept=".csv,text/csv" hidden></div>
   <div id="aStat" class="bc" style="margin-bottom:6px"></div>
   <div id="azones"></div>
+ </div>
+ <div class="card" id="clbox">
+  <h2>Affinity map</h2>
+  <p class="sub" style="margin-bottom:8px">Each dot is a department, colored by its current college. Departments with high affinity, directly or through shared neighbors, sit close together; those with little affinity sit far apart. Hover over a dot to see its name; click it to rate that department above. The outlined dot is the department being rated.</p>
+  <div id="clwrap"><svg id="clsvg" viewBox="0 0 800 520" role="img" aria-label="Affinity map of departments"></svg><div id="cltip" hidden></div></div>
+  <div id="clleg" class="bc" style="margin-top:8px"></div>
  </div>
 </div>
 </main>
@@ -364,6 +377,73 @@ function renderAff(){
  $('azones').innerHTML=h;
  const cnt=[0,1,2,3].map(l=>others.filter(r=>lv(r.unit)===l).length);
  $('aStat').textContent=`${esc(focal)}: ${cnt[3]} high, ${cnt[2]} moderate, ${cnt[1]} some, ${cnt[0]} little (of ${others.length}).`.replace(/&amp;/g,'&');
+ renderCluster();
+}
+// Affinity map: place departments so on-screen distance follows affinity. Target distance between two
+// departments is the shortest path through the affinity graph (high = 1, moderate = 2, some = 3.5 per step,
+// capped at 5 when unconnected); positions are fitted to those targets by stochastic gradient descent on stress.
+const CW=800,CH=520,CR=7,CAP=5;
+let clKey=null,clPos=null,clXY=null;
+function clusterLayout(){
+ const n=rows.length,len=w=>w>=8?1:w>=4?2:w>0?3.5:0;
+ const D=Array.from({length:n},(_,i)=>{const d=new Float64Array(n).fill(Infinity);d[i]=0;return d});
+ let any=false;
+ for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){const l=len(pairW(rows[i].unit,rows[j].unit));if(l){D[i][j]=D[j][i]=l;any=true}}
+ if(!any)return null;
+ for(let k=0;k<n;k++){const Dk=D[k];for(let i=0;i<n;i++){const Di=D[i],dik=Di[k];if(dik===Infinity)continue;for(let j=0;j<n;j++){const v=dik+Dk[j];if(v<Di[j])Di[j]=v}}}
+ // Seeded random numbers so the layout does not jump around between redraws
+ let s=12345;const rnd=()=>{s=(s+0x6D2B79F5)|0;let t=Math.imul(s^(s>>>15),1|s);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296};
+ // Start from the previous map when there is one (so small rating changes move dots only a little), else a circle ordered by current college
+ const warm=clPos&&rows.every(r=>clPos.has(r.unit));
+ const ord=rows.map((r,i)=>i).sort((a,b)=>cOrder.indexOf(rows[a].coll)-cOrder.indexOf(rows[b].coll)||a-b),ang=new Float64Array(n);
+ ord.forEach((i,k)=>ang[i]=2*Math.PI*k/n);
+ const X=new Float64Array(n),Y=new Float64Array(n);
+ rows.forEach((r,i)=>{if(warm){[X[i],Y[i]]=clPos.get(r.unit)}else{X[i]=CAP*Math.cos(ang[i])+rnd()*.1;Y[i]=CAP*Math.sin(ang[i])+rnd()*.1}});
+ const P=[];for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){const d=Math.min(D[i][j],CAP);P.push([i,j,d,1/(d*d)])}
+ const T=warm?20:60,eMax=warm?1:CAP*CAP,eMin=.01,lam=Math.log(eMax/eMin)/(T-1);
+ for(let t=0;t<T;t++){const eta=eMax*Math.exp(-lam*t);
+  for(let k=P.length-1;k>0;k--){const m=Math.floor(rnd()*(k+1));[P[k],P[m]]=[P[m],P[k]]}
+  for(const[i,j,d,w]of P){const dx=X[i]-X[j],dy=Y[i]-Y[j],l=Math.hypot(dx,dy)||1e-6,r=Math.min(w*eta,1)*(l-d)/(2*l);X[i]-=r*dx;Y[i]-=r*dy;X[j]+=r*dx;Y[j]+=r*dy}
+ }
+ clPos=new Map(rows.map((r,i)=>[r.unit,[X[i],Y[i]]]));
+ // Fit to the drawing area, then nudge apart any dots that overlap
+ const pad=CR*3,x0=Math.min(...X),x1=Math.max(...X),y0=Math.min(...Y),y1=Math.max(...Y);
+ const sc=Math.min((CW-2*pad)/((x1-x0)||1),(CH-2*pad)/((y1-y0)||1)),ox=(CW-sc*(x1-x0))/2,oy=(CH-sc*(y1-y0))/2;
+ const sx=Array.from(X,x=>ox+(x-x0)*sc),sy=Array.from(Y,y=>oy+(y-y0)*sc),gap=2*CR+4;
+ for(let it=0;it<80;it++){let moved=false;
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){let dx=sx[j]-sx[i],dy=sy[j]-sy[i],l=Math.hypot(dx,dy);if(l>=gap)continue;
+   if(l<1e-6){dx=rnd()-.5;dy=rnd()-.5;l=Math.hypot(dx,dy)}const p=(gap-l)/(2*l);sx[i]-=dx*p;sy[i]-=dy*p;sx[j]+=dx*p;sy[j]+=dy*p;moved=true}
+  for(let i=0;i<n;i++){sx[i]=Math.min(CW-CR-2,Math.max(CR+2,sx[i]));sy[i]=Math.min(CH-CR-2,Math.max(CR+2,sy[i]))}
+  if(!moved)break}
+ return new Map(rows.map((r,i)=>[r.unit,[sx[i],sy[i]]]));
+}
+function renderCluster(){
+ const key=rows.map(a=>a.unit).join('|')+'#'+rows.map((a,i)=>rows.slice(i+1).map(b=>pairW(a.unit,b.unit)).join('')).join('');
+ if(key!==clKey){clKey=key;clXY=clusterLayout()}
+ $('cltip').hidden=true;
+ const svg=$('clsvg');
+ if(!clXY){svg.innerHTML=`<text id="clmsg" x="${CW/2}" y="${CH/2}" text-anchor="middle">Rate some departments above to see the map.</text>`;$('clleg').innerHTML='';return}
+ const col=r=>hasCol?`hsl(${hue(r.coll)} 60% 55%)`:'var(--ac)';
+ // Draw the selected department last so it sits on top
+ const order=[...rows.filter(r=>r.unit!==focal),...rows.filter(r=>r.unit===focal)];
+ svg.innerHTML=order.map(r=>{const[x,y]=clXY.get(r.unit),f=r.unit===focal;
+  return `<g class="dot${f?' on':''}" data-u="${esc(r.unit)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${CR+6}" style="fill:transparent;stroke:none"/>`+
+   `<circle class="v" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${CR}" style="fill:${col(r)};fill-opacity:1;stroke:${f?'var(--tx)':'var(--card)'};stroke-width:2"/></g>`}).join('');
+ $('clleg').innerHTML=hasCol?'Current college: '+cOrder.map(k=>`<span style="white-space:nowrap;margin-right:10px"><span class="sw" style="--h:${hue(k)}"></span>${esc(k)}</span>`).join(''):'';
+}
+{
+ const svg=$('clsvg'),tip=$('cltip'),wrap=$('clwrap');
+ const show=g=>{const r=rowBy.get(g.dataset.u);if(!r)return;
+  const c=g.querySelector('.v').getBoundingClientRect(),w=wrap.getBoundingClientRect();
+  tip.innerHTML=`<b>${esc(r.unit)}</b>${r.coll?`<span>${esc(r.coll)}</span>`:''}`;tip.hidden=false;
+  const x=c.left+c.width/2-w.left,top=c.top-w.top,tw=tip.offsetWidth/2;
+  tip.style.left=Math.min(w.width-tw-4,Math.max(tw+4,x))+'px';
+  if(top-tip.offsetHeight-8<0){tip.style.top=(c.bottom-w.top+tip.offsetHeight+6)+'px'}else tip.style.top=(top-6)+'px'};
+ svg.addEventListener('pointerover',e=>{const g=e.target.closest('.dot');if(g)show(g)});
+ svg.addEventListener('pointerout',e=>{const g=e.target.closest('.dot');if(g&&!g.contains(e.relatedTarget))tip.hidden=true});
+ // Clicking a dot makes it the department being rated; the redraw replaces the dots, so show its name again
+ svg.addEventListener('click',e=>{const g=e.target.closest('.dot');if(!g||g.dataset.u===focal)return;const u=g.dataset.u;focal=u;affSel=null;renderAff();
+  const ng=[...svg.querySelectorAll('.dot')].find(d=>d.dataset.u===u);if(ng)show(ng)});
 }
 const ab=$('affbox');
 ab.addEventListener('dragstart',e=>{const c=e.target.closest('.chip');if(c){e.dataTransfer.setData('text/plain',c.dataset.u);e.dataTransfer.effectAllowed='move'}});

@@ -50,6 +50,7 @@ Text in parentheses in a header is dropped from the display name. Some headers a
 - Pick a department, then drag every other department into one of four nested squares: little, some, moderate or high affinity (weights 0, 1, 4 and 8, used internally).
 - Departments that share a current college start at moderate affinity. A checkbox turns this default off. "Apply both ways" makes a rating symmetric.
 - Save and load the ratings as a CSV.
+- An **Affinity map** below the squares shows every department as a dot, colored by its current college. Departments with high affinity (directly or through shared neighbors) sit close together, and those with little affinity sit far apart. Hover over a dot to see its name; click it to rate that department.
 
 ## File formats
 
