@@ -59,9 +59,11 @@ def plan_csv(name):
 
 
 csvs = [plan_csv(n) for n in BUILT_IN]
+tfcre = (ROOT / "Input Files" / "TFCRE-affinities.csv").read_text(encoding="utf-8-sig").replace("\r\n", "\n")
 
 page = PAGE.read_text(encoding="utf-8")
 page = put(page, "DATA", r"\]\]", "const DATA=[\n" + ",\n".join(json.dumps(r, ensure_ascii=False) for r in rows) + "];\n")
 page = put(page, "PLANS", r"\]", "const PLANS=[\n" + ",\n".join(json.dumps(t, ensure_ascii=False) for t in csvs) + "];\n")
+page = put(page, "TFCRE_AFF", r"\]", "const TFCRE_AFF=[\n" + json.dumps(tfcre, ensure_ascii=False) + "];\n")
 PAGE.write_text(page, encoding="utf-8")
-print(f"Wrote {len(rows) - 1} units from {SRC.name} and {len(csvs)} plans into index.html")
+print(f"Wrote {len(rows) - 1} units from {SRC.name}, {len(csvs)} plans and {tfcre.count(chr(10)) - 1} TFCRE affinities into index.html")
