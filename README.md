@@ -48,9 +48,12 @@ Text in parentheses in a header is dropped from the display name. Some headers a
 
 ### Department affinity tab
 - Pick a department, then drag every other department into one of four nested squares: little, some, moderate or high affinity (weights 0, 1, 4 and 8, used internally).
-- Departments that share a current college start at moderate affinity. A checkbox turns this default off. "Apply both ways" makes a rating symmetric.
+- Pairs you have not rated count as moderate affinity when the departments share a current college, and little otherwise. "Apply both ways" makes a rating symmetric.
 - Save and load the ratings as a CSV.
 - **Load TFCRE Affinities** replaces the current ratings with the ones in `Input Files/TFCRE-affinities.csv`, which is built into the page (Undo load restores the previous ratings). After editing that file, run `python tools/update_data.py` to rebuild it into the page.
+- **Load Flat Start Affinities** clears all ratings, so departments that share a current college are at moderate affinity and all others at little.
+- **Reset All Affinities** rates every pair of departments as little affinity, including those that share a current college.
+- Undo load restores the ratings from before any of these three buttons, or a CSV load.
 - An **Affinity map** below the squares shows every department as a dot, colored by its current college. Departments with high affinity (directly or through shared neighbors) sit close together, and those with little affinity sit far apart. Hover over a dot to see its name; click it to rate that department.
 
 ## File formats

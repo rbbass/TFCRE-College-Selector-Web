@@ -133,11 +133,10 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
 
 <div id="pgA" style="display:none">
  <div class="card" id="affbox">
-  <div class="bar" style="margin-bottom:10px"><button id="aTfcre" title="Replace the current ratings with the TFCRE affinity ratings">Load TFCRE Affinities</button></div>
+  <div class="bar" style="margin-bottom:10px"><button id="aTfcre" title="Replace the current ratings with the TFCRE affinity ratings">Load TFCRE Affinities</button><button id="aFlat" title="Clear all ratings so departments that share a current college start at moderate and all others at little">Load Flat Start Affinities</button><button id="aZero" title="Place every department in Little affinity with every other department">Reset All Affinities</button></div>
   <div class="bar" style="margin-bottom:8px"><h2 style="margin:0">Department affinity</h2>
    <button class="ghost" id="aPrev">&#9664; Prev</button><select id="focal" style="max-width:260px"></select><button class="ghost" id="aNext">Next &#9654;</button>
    <label style="font-size:12px"><input type="checkbox" id="aSym" checked> Apply both ways</label>
-   <label style="font-size:12px"><input type="checkbox" id="aDef" checked> Same-college departments start at moderate</label>
    <button class="ghost" id="aList">Copy pairs</button><button class="ghost" id="aMat">Copy matrix</button><button class="ghost" id="aRst" title="Remove your changes for this department and return to the defaults">Reset this department</button></div>
   <p class="sub" style="margin-bottom:8px">Pick a department, then drag every other department toward the center to show how closely it relates to it. Departments that share a current college start in the Moderate square; move them if they don't belong. You can also tap a department, then tap a square. Saved in this browser.</p>
   <div class="bar" style="margin-bottom:8px"><button class="ghost" id="aSave">Save affinities (CSV)</button><button class="ghost" id="aLoad">Load affinities (CSV)</button><button class="ghost" id="aUndo" disabled>Undo load</button><input type="file" id="aFile" accept=".csv,text/csv" hidden></div>
@@ -350,8 +349,8 @@ pl.addEventListener('click',e=>{
 pl.addEventListener('change',e=>{const t=e.target;if(t.dataset.p!==undefined){t.checked?cmpSel.add(t.dataset.p):cmpSel.delete(t.dataset.p);renderPlans()}else if(t.id==='pm')renderPlans()});
 let aff={},focal=null,affSel=null,page='C';
 const AW=[0,1,4,8],ALAB=['Little affinity','Some affinity','Moderate affinity','High affinity'];
-let useDef=true;try{useDef=localStorage.getItem('affdef-v1')!=='0'}catch(e){}
-function defW(a,b){if(!useDef||!hasCol)return 0;const ra=rowBy.get(a),rb=rowBy.get(b);return ra&&rb&&ra.coll&&ra.coll!=='(No college listed)'&&ra.coll===rb.coll?AW[2]:0}
+// Unrated pairs: departments that share a current college count as moderate, all others as little
+function defW(a,b){if(!hasCol)return 0;const ra=rowBy.get(a),rb=rowBy.get(b);return ra&&rb&&ra.coll&&ra.coll!=='(No college listed)'&&ra.coll===rb.coll?AW[2]:0}
 const dirW=(a,b)=>{const v=(aff[a]||{})[b];return v!==undefined?v:defW(a,b)};
 function pairW(a,b){const ea=(aff[a]||{})[b],eb=(aff[b]||{})[a];if(ea===undefined&&eb===undefined)return defW(a,b);return Math.max(ea||0,eb||0)}
 try{aff=JSON.parse(localStorage.getItem('affinity-v1')||'{}')||{}}catch(e){aff={}}
@@ -366,7 +365,6 @@ function setAff(u,w){
 function renderAff(){
  if(page!=='A'||!rows.length)return;
  if(!focal||!rows.some(r=>r.unit===focal))focal=rows[0].unit;
- $('aDef').disabled=!hasCol;
  const rated=u=>Object.keys(aff[u]||{}).length;
  const fs=$('focal');
  fs.innerHTML=rows.map(r=>`<option value="${esc(r.unit)}">${esc(r.unit)}${rated(r.unit)?' ('+rated(r.unit)+' adjusted)':''}</option>`).join('');
@@ -581,6 +579,11 @@ $('aFile').onchange=async e=>{
  loadAffCSV(text,f.name);
 };
 $('aTfcre').onclick=()=>loadAffCSV(TFCRE_AFF[0],'TFCRE-affinities.csv');
+// Flat start: drop every rating, so only the same-college default applies.
+// Reset all: rate every pair as little, which also overrides the same-college default.
+function replaceAff(na,msg){prevAff=JSON.parse(JSON.stringify(aff));aff=na;saveAff();$('aUndo').disabled=false;render();say(msg+' Use Undo load to restore your previous ratings.')}
+$('aFlat').onclick=()=>replaceAff({},'Flat start: departments that share a current college are at moderate affinity, all others at little.');
+$('aZero').onclick=()=>{const na={};rows.forEach(a=>{na[a.unit]={};rows.forEach(b=>{if(a!==b)na[a.unit][b.unit]=0})});replaceAff(na,'All affinities reset: every pair of departments is at little affinity.')};
 function loadAffCSV(text,fname){
  let data;try{data=parseCSV(text)}catch(err){say('Could not read '+fname+'.');return}
  const m=unitMap(),start=/^department/i.test((data[0]||[])[0]||'')?1:0,na={};let ok=0,skip=0;
@@ -638,8 +641,6 @@ $('lpFile').onchange=async e=>{
  say(`Loaded "${k}" (${n} departments) as your working arrangement`+(ks.length>1?`. The file holds ${ks.length} plans, so only the first was used; use "Add plan files" in the Plans box to import them all`:'')+(r.skip?`. ${r.skip} rows skipped: unknown department`:'')+'. Use Undo load to restore your previous arrangement.');
 };
 $('lpUndo').onclick=()=>{if(!prevWork)return;assign=prevWork.assign;names=prevWork.names;prevWork=null;sel=null;save();colleges();$('lpUndo').disabled=true;say('Restored your previous arrangement.')};
-$('aDef').checked=useDef;
-$('aDef').onchange=()=>{useDef=$('aDef').checked;try{localStorage.setItem('affdef-v1',useDef?'1':'0')}catch(e){}render()};
 $('q').oninput=render;
 load(DATA);say('Showing department data ('+rows.length+' units)');
 </script></body></html>
