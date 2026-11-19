@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "Input Files" / "Departments and Attributes.xlsx"
 PLANS = ROOT / "College Plans"
 PAGE = ROOT / "index.html"
-BUILT_IN = ["Advising Pathways", "House Proposal", "SCH Balance", "AnH EnS"]
+BUILT_IN = ["EBH plan", "House Proposal", "Modified Advising Pathways", "Open Public Health Cluster", "Strategic Plan", "The Full Data Model", "The Tensions Model"]
 
 
 def cell(c):
