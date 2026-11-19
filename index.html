@@ -272,9 +272,10 @@ function table(rs){
 }
 
 function say(t){$('msg').textContent=t}
-const NB=6;let assign={},names=Array.from({length:NB},(_,i)=>'College '+(i+1)),sel=null;
-function save(){try{localStorage.setItem('college-v1',JSON.stringify({assign,names}))}catch(e){}}
-function restore(){try{const s=JSON.parse(localStorage.getItem('college-v1')||'null');if(s){assign=s.assign||{};if(Array.isArray(s.names)&&s.names.length===NB)names=s.names}}catch(e){}}
+// src: the plan the working arrangement was loaded from ({k: plan key or null for a file, name}), so edits can be saved under that plan's name
+const NB=6;let assign={},names=Array.from({length:NB},(_,i)=>'College '+(i+1)),sel=null,src=null;
+function save(){try{localStorage.setItem('college-v1',JSON.stringify({assign,names,src}))}catch(e){}}
+function restore(){try{const s=JSON.parse(localStorage.getItem('college-v1')||'null');if(s){assign=s.assign||{};if(Array.isArray(s.names)&&s.names.length===NB)names=s.names;src=s.src&&s.src.name?s.src:null}}catch(e){}}
 function move(u,b){assign[u]=b;save();colleges()}
 function colleges(){
  fillSg();
@@ -375,7 +376,7 @@ async function saveFile(name,blob){
 $('dlS').onclick=downloadSummary;
 $('cpS').onclick=()=>copy([...$('sum').rows].map(r=>[...r.cells].map(c=>c.textContent).join('\t')).join('\n'),'Summary copied. Paste into Excel.');
 $('cpA').onclick=()=>copy((hasCol?'Unit\tCurrent college\tNew college\n':'Unit\tCollege\n')+rows.map(r=>r.unit+'\t'+(hasCol?r.coll+'\t':'')+((assign[r.unit]??-1)>=0?names[assign[r.unit]]:'')).join('\n'),'Assignments copied. Paste into Excel.');
-$('rst').onclick=e=>twice(e.target,()=>{assign={};sel=null;save();colleges()});
+$('rst').onclick=e=>twice(e.target,()=>{assign={};src=null;sel=null;save();colleges()});
 let plans={},cmpSel=new Set(['__cur']),VAL=()=>null;
 try{plans=JSON.parse(localStorage.getItem('plans-v1')||'{}')||{}}catch(e){plans={}}
 const sp=()=>{try{localStorage.setItem('plans-v1',JSON.stringify(plans))}catch(e){}};
@@ -386,6 +387,9 @@ function twice(t,fn){if(t.dataset.arm){t.dataset.arm='';fn();return}t.dataset.ar
 const nm6=n=>Array.from({length:NB},(_,i)=>(n&&n[i])||('College '+(i+1)));
 function allPlans(){const b=builtIn();return Object.keys(b).map(n=>({k:'__b:'+n,label:n,p:b[n],b:1})).concat(Object.keys(plans).map(n=>({k:n,label:n,p:plans[n]})))}
 const lab=x=>x.label;
+const working=()=>({assign:Object.fromEntries(Object.entries(assign).filter(([u,b])=>b>=0)),names:[...names]});
+// True when the working arrangement no longer matches plan p (renamed colleges or moved departments)
+const differs=p=>{const a=nm6(p.names);return names.some((n,i)=>n!==a[i])||rows.some(r=>(assign[r.unit]??-1)!==(p.assign[r.unit]??-1))};
 function renderPlans(){
  const pm=$('pm');
  if(pm.dataset.k!==cols.join('|')){pm.innerHTML=pickCols().map(c=>`<option>${esc(c)}</option>`).join('');pm.value=find(/sch/i)||cols[0];pm.dataset.k=cols.join('|')}
@@ -393,7 +397,7 @@ function renderPlans(){
  const list=allPlans(),byK={};list.forEach(x=>byK[x.k]=x);
  [...cmpSel].forEach(k=>{if(k!=='__cur'&&!byK[k])cmpSel.delete(k)});
  const keys=['__cur',...list.map(x=>x.k)];
- $('plist').innerHTML=keys.map(k=>{const x=byK[k];return `<div class="prow"><label><input type="checkbox" data-p="${esc(k)}" ${cmpSel.has(k)?'checked':''}> ${k==='__cur'?'<b>Current working plan</b>':esc(lab(x))+(x.b?' <span class="bc" style="margin:0">built-in</span>':'')}</label>${k==='__cur'?` <button class="ghost" data-save="__cur">Save CSV</button>`:` <button class="ghost" data-load="${esc(k)}">Load</button> <button class="ghost" data-save="${esc(k)}">Save CSV</button>`+(x.b?'':` <button class="ghost" data-del="${esc(k)}">Delete</button>`)}</div>`}).join('');
+ $('plist').innerHTML=keys.map(k=>{const x=byK[k];return `<div class="prow"><label><input type="checkbox" data-p="${esc(k)}" ${cmpSel.has(k)?'checked':''}> ${k==='__cur'?'<b>Current working plan</b>'+(src?` <span class="bc" style="margin:0">from ${esc(src.name)}</span>`:''):esc(lab(x))+(x.b?' <span class="bc" style="margin:0">built-in</span>':'')}</label>${k==='__cur'?` <button class="ghost" data-save="__cur">Save CSV</button>`:` <button class="ghost" data-load="${esc(k)}">Load</button> `+(src&&src.k===k&&differs(x.p)?`<button class="ghost" data-save="${esc(k)}" data-work="1" title="Save this plan with the college names and placements you changed in Design colleges">Save CSV with your changes</button>`:`<button class="ghost" data-save="${esc(k)}">Save CSV</button>`)+(x.b?'':` <button class="ghost" data-del="${esc(k)}">Delete</button>`)}</div>`}).join('');
  const sl=keys.filter(k=>cmpSel.has(k));
  if(sl.length<2){$('pcmp').innerHTML='<p class="sub">Tick two or more plans above to compare them. Save the current arrangement first so you can keep changing it.</p>';return}
  const m=pm.value,TOTAFF=pairSum(rows);
@@ -420,8 +424,8 @@ const pl=$('plans');
 pl.addEventListener('click',e=>{
  const t=e.target,d=t.dataset||{};
  if(t.id==='psave'){const n=$('pn').value.trim()||('Plan '+(Object.keys(plans).length+1));const had=!!plans[n];plans[n]={assign:{...assign},names:[...names]};sp();cmpSel.add(n);$('pn').value='';renderPlans();say((had?'Updated plan: ':'Saved plan: ')+n)}
- else if('save' in d){const k=d.save,pn=k==='__cur'?'Working plan':pName(k),pp=k==='__cur'?{assign:Object.fromEntries(Object.entries(assign).filter(([u,b])=>b>=0)),names}:getPlan(k);if(!pp)return;saveCSV('plan - '+fileSafe(pn)+'.csv',planCSV(pn,pp))}
- else if('load' in d){const k=d.load;twice(t,()=>{const x=getPlan(k);if(!x)return;assign={...x.assign};names=nm6(x.names);sel=null;save();colleges();say('Loaded "'+pName(k)+'" as the working plan')})}
+ else if('save' in d){const k=d.save,pn=k==='__cur'?(src?src.name:'Working plan'):pName(k),pp=k==='__cur'||d.work?working():getPlan(k);if(!pp)return;saveCSV('plan - '+fileSafe(pn)+'.csv',planCSV(pn,pp))}
+ else if('load' in d){const k=d.load;twice(t,()=>{const x=getPlan(k);if(!x)return;assign={...x.assign};names=nm6(x.names);src={k,name:pName(k)};sel=null;save();colleges();say('Loaded "'+pName(k)+'" as the working plan. Rename colleges or move departments, then use "Save CSV with your changes" beside it.')})}
  else if('del' in d){const k=d.del;twice(t,()=>{delete plans[k];cmpSel.delete(k);sp();renderPlans()})}
  else if(t.id==='pcp'){const tb=$('pst');if(tb)copy([...tb.rows].map(r=>[...r.cells].map(c=>c.textContent).join('\t')).join('\n'),'Comparison copied. Paste into Excel.');else say('Select two or more plans first')}
 });
@@ -715,11 +719,11 @@ $('lpFile').onchange=async e=>{
  if(!ks.length){say('No usable rows in '+f.name+'. Expected columns: Plan, Department, College number (1 to '+NB+'), College name.');return}
  const k=ks[0],p=r.np[k],n=Object.keys(p.assign).length;
  if(!n){say('None of the departments in '+f.name+' match the department list.');return}
- prevWork={assign:{...assign},names:[...names]};
- assign={...p.assign};names=nm6(p.names);sel=null;save();colleges();$('lpUndo').disabled=false;
+ prevWork={assign:{...assign},names:[...names],src};
+ assign={...p.assign};names=nm6(p.names);src={k:null,name:k};sel=null;save();colleges();$('lpUndo').disabled=false;
  say(`Loaded "${k}" (${n} departments) as your working arrangement`+(ks.length>1?`. The file holds ${ks.length} plans, so only the first was used; use "Add plan files" in the Plans box to import them all`:'')+(r.skip?`. ${r.skip} rows skipped: unknown department`:'')+'. Use Undo load to restore your previous arrangement.');
 };
-$('lpUndo').onclick=()=>{if(!prevWork)return;assign=prevWork.assign;names=prevWork.names;prevWork=null;sel=null;save();colleges();$('lpUndo').disabled=true;say('Restored your previous arrangement.')};
+$('lpUndo').onclick=()=>{if(!prevWork)return;assign=prevWork.assign;names=prevWork.names;src=prevWork.src;prevWork=null;sel=null;save();colleges();$('lpUndo').disabled=true;say('Restored your previous arrangement.')};
 $('q').oninput=render;
 load(DATA);say('Showing department data ('+rows.length+' units)');
 </script></body></html>
