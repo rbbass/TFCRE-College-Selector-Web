@@ -116,6 +116,7 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
   <h2>College summary</h2>
   <div class="scroll"><table id="sum"></table></div>
   <p class="sub" style="font-size:12px;margin:6px 0 0">Each value is the total across the college's departments.</p>
+  <div class="bar" style="margin-top:10px"><button id="dlS">Download College Summary Data</button></div>
 </div>
 
 <div class="card" id="plans">
@@ -297,6 +298,81 @@ cc.addEventListener('drop',e=>{const z=e.target.closest('[data-b]');if(!z)return
 cc.addEventListener('click',e=>{const c=e.target.closest('.chip');if(c){sel=sel===c.dataset.u?null:c.dataset.u;colleges();return}if(e.target.tagName==='INPUT')return;const z=e.target.closest('[data-b]');if(z&&sel){const u=sel;sel=null;move(u,+z.dataset.b)}});
 cc.addEventListener('change',e=>{if(e.target.classList.contains('bn')){const b=+e.target.dataset.b;names[b]=e.target.value.trim()||('College '+(b+1));save();colleges()}});
 function copy(t,ok){navigator.clipboard.writeText(t).then(()=>say(ok),()=>say('Copy was blocked by the browser'))}
+// Excel export of the College summary. ExcelJS is loaded only when the button is first used.
+let xlLib=null;
+const loadXL=()=>xlLib||(xlLib=new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js';s.onload=()=>ok(window.ExcelJS);s.onerror=()=>{xlLib=null;no(new Error('load'))};document.head.appendChild(s)}));
+const mLabel=c=>c==='# GAs'?'GAs Inst. of Rec.':c;
+function mSource(c){
+ if(c==='Total # FT Faculty')return 'Calculated: # Faculty TT + # Faculty NTTF';
+ if(c==='Student Headcount Total')return 'Calculated: undergraduate + graduate student headcounts';
+ const h=DATA[0].find(h=>{const k=clean(h);return (RENAME[k]||k)===c});return h?String(h):'';
+}
+async function downloadSummary(){
+ const btn=$('dlS');btn.disabled=true;say('Preparing the College Summary workbook…');
+ try{
+  const XL=await loadXL(),wb=new XL.Workbook();wb.creator='College Builder Dashboard';wb.created=new Date();
+  const g=b=>rows.filter(r=>(assign[r.unit]??-1)===b);
+  const tot=(c,l)=>{const vs=l.map(r=>r.v[c]).filter(v=>v!=null);return vs.length?Math.round(vs.reduce((a,b)=>a+b,0)*1e6)/1e6:null};
+  const un=g(-1),groups=names.map((n,b)=>({n,l:g(b)}));
+  if(un.length)groups.push({n:'Not yet assigned',l:un,u:1});
+  groups.push({n:'All departments',l:rows,all:1});
+  const showAff=pairSum(rows)>0,today=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+  const nf=c=>cur(c)?'"$"#,##0':rows.some(r=>r.v[c]!=null&&!Number.isInteger(r.v[c]))?'#,##0.0#':'#,##0',HEAD='FF2F6F6A',BAND='FFEFF4F3',LINE={style:'thin',color:{argb:'FFD0D0CC'}};
+  const title=(ws,t,s,w)=>{ws.mergeCells(1,1,1,w);ws.getCell(1,1).value=t;ws.getCell(1,1).font={bold:true,size:16,color:{argb:HEAD}};
+   ws.mergeCells(2,1,2,w);ws.getCell(2,1).value=s;ws.getCell(2,1).font={italic:true,color:{argb:'FF6B6B66'}};ws.getCell(2,1).alignment={wrapText:true,vertical:'top'};ws.getRow(2).height=32};
+  const head=row=>{row.eachCell(c=>{c.font={bold:true,color:{argb:'FFFFFFFF'}};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:HEAD}};c.alignment={wrapText:true,vertical:'middle',horizontal:c.col===1?'left':'center'};c.border={bottom:LINE}});row.height=34};
+
+  // Sheet 1: one row per measure, one column per college
+  const s1=wb.addWorksheet('College Summary',{views:[{state:'frozen',xSplit:1,ySplit:3}]}),W=groups.length+1;
+  title(s1,'College Summary',`Totals for each proposed college, ${today}. Each number is the sum across the departments placed in that college; a dash means no data was reported.`,W);
+  head(s1.addRow(['Measure',...groups.map(x=>x.n)]));
+  const lines=[{lab:'Number of departments',v:x=>x.l.length,f:'0'}];
+  if(showAff)lines.push({lab:'Within-college affinity score',v:x=>x.all?null:pairSum(x.l),f:'#,##0'});
+  cols.forEach(c=>lines.push({lab:mLabel(c),v:x=>tot(c,x.l),f:nf(c)}));
+  lines.forEach((ln,i)=>{const r=s1.addRow([ln.lab,...groups.map(x=>{const v=ln.v(x);return v==null?'–':v})]);
+   r.eachCell(c=>{c.border={bottom:LINE};if(i%2)c.fill={type:'pattern',pattern:'solid',fgColor:{argb:BAND}};if(c.col>1){c.numFmt=ln.f;c.alignment={horizontal:'right'}}if(c.col===W&&groups[W-2].all)c.font={bold:true}});r.getCell(1).font={bold:true}});
+  s1.getColumn(1).width=34;for(let i=2;i<=W;i++)s1.getColumn(i).width=Math.max(16,Math.min(30,String(groups[i-2].n).length+4));
+  s1.addRow([]);
+  [`"All departments" is the university-wide total.${un.length?' "Not yet assigned" covers departments not placed in any college.':''}`,
+   ...(showAff?['The within-college affinity score adds up the affinity ratings between every pair of departments in the same college; higher means the college groups more closely related departments.']:[]),
+   'See the "Departments by College" sheet for the numbers behind each total, and "About the Data" for where each measure comes from.']
+   .forEach(t=>{const r=s1.addRow([t]);s1.mergeCells(r.number,1,r.number,W);r.getCell(1).alignment={wrapText:true,vertical:'top'};r.getCell(1).font={color:{argb:'FF6B6B66'}};r.height=30});
+
+  // Sheet 2: departments listed under each college, with a subtotal per college
+  const s2=wb.addWorksheet('Departments by College',{views:[{state:'frozen',xSplit:2,ySplit:3}]}),W2=cols.length+3;
+  title(s2,'Departments by College','Each proposed college is listed with its departments, followed by the college total.',W2);
+  head(s2.addRow(['Proposed college','Department','Current college',...cols.map(mLabel)]));
+  groups.filter(x=>!x.all).forEach(x=>{
+   [...x.l].sort((a,b)=>a.unit.localeCompare(b.unit)).forEach(r=>{const row=s2.addRow([x.n,r.unit,r.coll,...cols.map(c=>r.v[c]??null)]);
+    row.eachCell({includeEmpty:true},c=>{c.border={bottom:LINE};if(c.col>3)c.numFmt=nf(cols[c.col-4])})});
+   const t=s2.addRow([x.n+' total',`${x.l.length} department${x.l.length===1?'':'s'}`,'',...cols.map(c=>tot(c,x.l))]);
+   t.eachCell({includeEmpty:true},c=>{c.font={bold:true};c.fill={type:'pattern',pattern:'solid',fgColor:{argb:BAND}};c.border={top:LINE,bottom:LINE};if(c.col>3)c.numFmt=nf(cols[c.col-4])});
+   s2.addRow([]);
+  });
+  s2.getColumn(1).width=28;s2.getColumn(2).width=36;s2.getColumn(3).width=30;cols.forEach((c,i)=>s2.getColumn(i+4).width=16);
+
+  // Sheet 3: what each measure means and where it comes from
+  const s3=wb.addWorksheet('About the Data');
+  title(s3,'About the Data','How the numbers in this workbook were produced.',2);
+  head(s3.addRow(['Measure','Source column in the department data']));
+  [['Number of departments','Count of departments placed in the college'],...(showAff?[['Within-college affinity score','Sum of the affinity ratings (from the Department affinity tab) between each pair of departments in the same college']]:[]),...cols.map(c=>[mLabel(c),mSource(c)])]
+   .forEach((p,i)=>{const r=s3.addRow(p);r.eachCell(c=>{c.border={bottom:LINE};c.alignment={wrapText:true,vertical:'top'};if(i%2)c.fill={type:'pattern',pattern:'solid',fgColor:{argb:BAND}}});r.getCell(1).font={bold:true}});
+  s3.addRow([]);
+  ['Values are totals of the figures reported for each department; blank or missing figures are left out of the totals.','Dollar amounts are rounded to the nearest dollar.',`Created ${today} with the College Builder Dashboard.`]
+   .forEach(t=>{const r=s3.addRow([t]);s3.mergeCells(r.number,1,r.number,2);r.getCell(1).alignment={wrapText:true};r.getCell(1).font={color:{argb:'FF6B6B66'}}});
+  s3.getColumn(1).width=34;s3.getColumn(2).width=80;
+
+  const buf=await wb.xlsx.writeBuffer(),name='College Summary '+new Date().toISOString().slice(0,10)+'.xlsx';
+  await saveFile(name,new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+ }catch(e){say(e&&e.message==='load'?'Could not load the Excel library. Check your internet connection and try again.':'Could not create the workbook.')}
+ finally{btn.disabled=false}
+}
+async function saveFile(name,blob){
+ let d=null;try{d=window.claude?await claude.use('downloads'):null}catch(e){}
+ if(d){try{await d.save({filename:name,data:blob});say('Saved '+name+'.');return}catch(e){if(e&&e.code==='declined'){say('Save cancelled.');return}}}
+ const a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);say('Saved '+name+'.');
+}
+$('dlS').onclick=downloadSummary;
 $('cpS').onclick=()=>copy([...$('sum').rows].map(r=>[...r.cells].map(c=>c.textContent).join('\t')).join('\n'),'Summary copied. Paste into Excel.');
 $('cpA').onclick=()=>copy((hasCol?'Unit\tCurrent college\tNew college\n':'Unit\tCollege\n')+rows.map(r=>r.unit+'\t'+(hasCol?r.coll+'\t':'')+((assign[r.unit]??-1)>=0?names[assign[r.unit]]:'')).join('\n'),'Assignments copied. Paste into Excel.');
 $('rst').onclick=e=>twice(e.target,()=>{assign={};sel=null;save();colleges()});

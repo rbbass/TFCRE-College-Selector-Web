@@ -41,7 +41,7 @@ Text in parentheses in a header is dropped from the display name. Some headers a
 ### Design colleges tab
 - Drag departments from the unassigned pool into six colleges (or tap a department, then tap a college). Rename a college by editing its title.
 - Departments are color-coded by their current college.
-- A summary table shows the sum of each column for each new college, plus the affinity kept inside each college.
+- A summary table shows the sum of each column for each new college, plus the affinity kept inside each college. "Download College Summary Data" saves it as a formatted Excel workbook with three sheets: the summary, each college's departments with a subtotal, and notes on where each measure comes from. The workbook is built in the browser with ExcelJS, which is loaded from cdnjs the first time the button is used, so that one step needs an internet connection.
 - **Suggest from affinity** groups the departments automatically to keep high-affinity departments together. Options: how even the college sizes must be, an optional financial balance (keep each college's total for a chosen column within a tolerance of the average), and whether to keep departments you have already placed. **Undo suggestion** restores the previous arrangement.
 - **Load a stored plan** opens a plan CSV as the working arrangement.
 - **Plans**: Advising Pathways, House Proposal, SCH Balance and AnH EnS are built in, marked "built-in", and cannot be deleted. Save the current arrangement, tick two or more plans to compare them on any column (balance table and side-by-side bars), and save each plan as its own CSV.
