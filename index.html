@@ -116,7 +116,7 @@ input[type=text]{font:inherit;color:var(--tx);background:var(--card);border:1px 
   <h2>College summary</h2>
   <div class="scroll"><table id="sum"></table></div>
   <p class="sub" style="font-size:12px;margin:6px 0 0">Each value is the total across the college's departments.</p>
-  <div class="bar" style="margin-top:10px"><button id="dlS">Download College Summary Data</button></div>
+  <div class="bar" style="margin-top:10px"><button id="dlS">Download College Summary Data</button><span id="dlMsg" class="bc" style="margin:0" role="status"></span></div>
 </div>
 
 <div class="card" id="plans">
@@ -309,7 +309,7 @@ function mSource(c){
  const h=DATA[0].find(h=>{const k=clean(h);return (RENAME[k]||k)===c});return h?String(h):'';
 }
 async function downloadSummary(){
- const btn=$('dlS');btn.disabled=true;say('Preparing the College Summary workbook…');
+ const btn=$('dlS');btn.disabled=true;dlSay('Preparing the College Summary workbook…');
  try{
   const XL=await loadXL(),wb=new XL.Workbook();wb.creator='College Builder Dashboard';wb.created=new Date();
   const g=b=>rows.filter(r=>(assign[r.unit]??-1)===b);
@@ -336,10 +336,25 @@ async function downloadSummary(){
   s1.addRow([]);
   [`"All departments" is the university-wide total.${un.length?' "Not yet assigned" covers departments not placed in any college.':''}`,
    ...(showAff?['The within-college affinity score adds up the affinity ratings between every pair of departments in the same college; higher means the college groups more closely related departments.']:[]),
-   'See the "Departments by College" sheet for the numbers behind each total, and "About the Data" for where each measure comes from.']
+   'See the "Charts" sheet for bar charts comparing the colleges, the "Departments by College" sheet for the numbers behind each total, and "About the Data" for where each measure comes from.']
    .forEach(t=>{const r=s1.addRow([t]);s1.mergeCells(r.number,1,r.number,W);r.getCell(1).alignment={wrapText:true,vertical:'top'};r.getCell(1).font={color:{argb:'FF6B6B66'}};r.height=30});
 
-  // Sheet 2: departments listed under each college, with a subtotal per college
+  // Sheet 2: bar charts comparing the six colleges, drawn as pictures (ExcelJS cannot write native charts)
+  const sc=wb.addWorksheet('Charts',{views:[{showGridLines:false}]});
+  title(sc,'College Comparison Charts',`Each bar is a college's total, ${today}. Exact values are on the "College Summary" sheet.`,12);
+  sc.getColumn(1).width=2;
+  const six=groups.filter(x=>!x.u&&!x.all),ug=find(/ug students/i),gr=find(/grad students/i);
+  const specs=[[find(/total sch/i)],[find(/total # ft faculty/i)],[ug,gr],[find(/awards received/i)],[find(/requested/i)]].filter(s=>s.every(Boolean));
+  let at=3;
+  specs.forEach(s=>{
+   const series=s.map(c=>({name:s.length>1?(c===ug?'Undergraduate':'Graduate'):mLabel(c),v:six.map(x=>tot(c,x.l))}));
+   const t=s.length>1?'Student headcount (majors): undergraduate and graduate':mLabel(s[0]);
+   const png=barChart(t,six.map(x=>x.n),series,cur(s[0]));
+   sc.addImage(wb.addImage({base64:png.url,extension:'png'}),{tl:{col:1,row:at},ext:{width:png.w,height:png.h}});
+   at+=Math.ceil(png.h/20)+2;
+  });
+
+  // Sheet 3: departments listed under each college, with a subtotal per college
   const s2=wb.addWorksheet('Departments by College',{views:[{state:'frozen',xSplit:2,ySplit:3}]}),W2=cols.length+3;
   title(s2,'Departments by College','Each proposed college is listed with its departments, followed by the college total.',W2);
   head(s2.addRow(['Proposed college','Department','Current college',...cols.map(mLabel)]));
@@ -365,15 +380,46 @@ async function downloadSummary(){
 
   const buf=await wb.xlsx.writeBuffer(),name='College Summary '+new Date().toISOString().slice(0,10)+'.xlsx';
   await saveFile(name,new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
- }catch(e){say(e&&e.message==='load'?'Could not load the Excel library. Check your internet connection and try again.':'Could not create the workbook.')}
- finally{btn.disabled=false}
+ }catch(e){console.error(e);dlSay(e&&e.message==='load'?'Could not load the Excel library. Check your internet connection and try again.':'Could not create the workbook.')}
+ // The browser can take several seconds to show its Save dialog, so keep the button locked briefly to avoid duplicate saves
+ finally{setTimeout(()=>{btn.disabled=false},5000)}
 }
+// Horizontal bar chart (stacked when given several series) drawn on a canvas; returns a PNG data URL and its size in CSS pixels
+function barChart(title,cats,series,money){
+ const S=2,W=760,LW=230,RP=70,top=series.length>1?64:40,band=40,bar=24,H=top+cats.length*band+34;
+ const cv=document.createElement('canvas');cv.width=W*S;cv.height=H*S;const x=cv.getContext('2d');x.scale(S,S);
+ const F='"Segoe UI",system-ui,sans-serif',INK='#1d1d1b',MUT='#6b6b66',GRID='#e2e1dc',COL=['#2a78d6','#eb6834'];
+ x.fillStyle='#ffffff';x.fillRect(0,0,W,H);
+ x.fillStyle=INK;x.font=`600 15px ${F}`;x.textBaseline='alphabetic';x.fillText(title,12,24);
+ const tot=cats.map((_,i)=>series.reduce((a,s)=>a+(s.v[i]||0),0)),has=cats.map((_,i)=>series.some(s=>s.v[i]!=null));
+ const mx=Math.max(1,...tot),step=(()=>{const r=mx/4,p=10**Math.floor(Math.log10(r)),m=r/p;return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*p})(),axMax=Math.ceil(mx/step)*step;
+ const x0=LW,pw=W-LW-RP,sx=v=>x0+v/axMax*pw,y0=top,y1=top+cats.length*band;
+ const lbl=v=>money?(v>=1e6?'$'+(v/1e6).toFixed(v>=1e7?0:1)+'M':v>=1e3?'$'+Math.round(v/1e3)+'K':'$'+Math.round(v)):Math.round(v).toLocaleString();
+ if(series.length>1){x.font=`12px ${F}`;let lx=12;series.forEach((s,k)=>{x.fillStyle=COL[k];x.fillRect(lx,38,12,12);x.fillStyle=INK;x.fillText(s.name,lx+18,49);lx+=x.measureText(s.name).width+42})}
+ x.font=`11px ${F}`;x.textAlign='center';
+ for(let v=0;v<=axMax+1e-9;v+=step){const px=Math.round(sx(v))+.5;x.strokeStyle=GRID;x.lineWidth=1;x.beginPath();x.moveTo(px,y0-4);x.lineTo(px,y1);x.stroke();x.fillStyle=MUT;x.fillText(lbl(v),px,y1+18)}
+ const wrap=(t,w)=>{const ws=String(t).split(' '),ls=[''];ws.forEach(wd=>{const c=(ls[ls.length-1]+' '+wd).trim();if(x.measureText(c).width<=w||!ls[ls.length-1])ls[ls.length-1]=c;else ls.push(wd)});return ls.slice(0,2)};
+ const rr=(a,b,w,h,r)=>{r=Math.min(r,w);x.beginPath();x.moveTo(a,b);x.lineTo(a+w-r,b);x.arcTo(a+w,b,a+w,b+r,r);x.lineTo(a+w,b+h-r);x.arcTo(a+w,b+h,a+w-r,b+h,r);x.lineTo(a,b+h);x.closePath();x.fill()};
+ cats.forEach((c,i)=>{
+  const cy=top+i*band+band/2;x.textAlign='right';x.fillStyle=INK;x.font=`13px ${F}`;
+  const ls=wrap(c,LW-24);ls.forEach((l,j)=>x.fillText(l,LW-12,cy+5+(j-(ls.length-1)/2)*15));
+  let px=x0;const last=series.reduce((a,s,k)=>s.v[i]>0?k:a,-1);
+  series.forEach((s,k)=>{const v=s.v[i]||0;if(v<=0)return;const w=sx(v)-x0-(k<last?2:0);x.fillStyle=COL[series.length>1?k:0];if(k===last)rr(px,cy-bar/2,Math.max(w,1),bar,4);else x.fillRect(px,cy-bar/2,Math.max(w,1),bar);px+=w+(k<last?2:0)});
+  x.textAlign='left';x.font=`600 12px ${F}`;x.fillStyle=INK;x.fillText(has[i]?lbl(tot[i]):'No data',(has[i]?sx(tot[i]):x0)+6,cy+4);
+ });
+ x.strokeStyle='#9b9a93';x.beginPath();x.moveTo(x0+.5,y0-4);x.lineTo(x0+.5,y1);x.stroke();
+ return{url:cv.toDataURL('image/png'),w:W,h:H};
+}
+// Status for the download button, shown beside it as well as in the page-wide message line at the top
+function dlSay(t){say(t);$('dlMsg').textContent=t}
 async function saveFile(name,blob){
  let d=null;try{d=window.claude?await claude.use('downloads'):null}catch(e){}
- if(d){try{await d.save({filename:name,data:blob});say('Saved '+name+'.');return}catch(e){if(e&&e.code==='declined'){say('Save cancelled.');return}}}
- const a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);say('Saved '+name+'.');
+ if(d){try{await d.save({filename:name,data:blob});dlSay('Saved '+name+'.');return}catch(e){if(e&&e.code==='declined'){dlSay('Save cancelled.');return}}}
+ const a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);dlSay('Sent '+name+' to your browser. Its Save dialog or download notice can take a few seconds to appear.');
 }
 $('dlS').onclick=downloadSummary;
+// Fetch the Excel library in the background once the page is idle, so the first download starts at once
+(window.requestIdleCallback||(f=>setTimeout(f,2000)))(()=>loadXL().catch(()=>{}));
 $('cpS').onclick=()=>copy([...$('sum').rows].map(r=>[...r.cells].map(c=>c.textContent).join('\t')).join('\n'),'Summary copied. Paste into Excel.');
 $('cpA').onclick=()=>copy((hasCol?'Unit\tCurrent college\tNew college\n':'Unit\tCollege\n')+rows.map(r=>r.unit+'\t'+(hasCol?r.coll+'\t':'')+((assign[r.unit]??-1)>=0?names[assign[r.unit]]:'')).join('\n'),'Assignments copied. Paste into Excel.');
 $('rst').onclick=e=>twice(e.target,()=>{assign={};src=null;sel=null;save();colleges()});
